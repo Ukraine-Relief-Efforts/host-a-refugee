@@ -17,7 +17,7 @@ import {
   MediaQuery,
 } from '@mantine/core';
 import { DateRangePicker } from '@mantine/dates';
-import { Nav, Footer } from '../components';
+import { Layout } from '../components';
 
 import matter from 'gray-matter';
 import axios from 'axios';
@@ -35,7 +35,6 @@ const Home = ({ metadata, content }: HomeProps) => {
     new Date(),
     new Date(),
   ]);
-  const [searchTerm, setSearchTerm] = useState<string>('');
 
   return (
     <>
@@ -45,21 +44,14 @@ const Home = ({ metadata, content }: HomeProps) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Container
-        size={'lg'}
-        style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}
-      >
-        <Nav />
-
+      <Layout>
         <Space h="xl" />
         <Paper padding="lg" shadow="sm" radius="md" withBorder>
           <div
             dangerouslySetInnerHTML={{ __html: marked.parse(content) }}
           ></div>
         </Paper>
-
-        <Footer />
-      </Container>
+      </Layout>
     </>
   );
 };

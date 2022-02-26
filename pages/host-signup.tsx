@@ -1,22 +1,5 @@
 import Head from 'next/head';
-import { useEffect, useState } from 'react';
-import {
-  Title,
-  Container,
-  Grid,
-  Space,
-  Button,
-  Paper,
-  Card,
-  Text,
-  Group,
-  Badge,
-  Center,
-  InputWrapper,
-  Input,
-  MediaQuery,
-} from '@mantine/core';
-import { Nav, HostSignup, Footer } from '../components';
+import { Layout, HostSignup } from '../components';
 
 const Home = () => {
   return (
@@ -27,11 +10,9 @@ const Home = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Container size={'lg'} style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
-        <Nav />
+      <Layout>
         <HostSignup />
-        <Footer />
-      </Container>
+      </Layout>
     </>
   );
 };

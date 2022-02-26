@@ -1,15 +1,20 @@
-import { Nav, Footer } from '../../components';
+import Head from 'next/head';
+import { Layout } from '../../components';
 import { dummyData } from '../../dummyData';
 
 export const Host = ({ name, location, capacity, url }: HostPageProps) => {
   return (
     <>
-      <Nav />
-      <article>
-        <h1>{name}</h1>
-        <p>{location}</p>
-      </article>
-      <Footer />
+      <Head>
+        <title>{name}</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <Layout>
+        <article>
+          <h1>{name}</h1>
+          <p>{location}</p>
+        </article>
+      </Layout>
     </>
   );
 };
@@ -28,7 +33,6 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }: GetStaticPropsType) {
   const { slug } = params;
   const data = dummyData.filter((item) => item.slug === slug);
-  console.log(data);
 
   return {
     props: { ...data },

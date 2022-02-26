@@ -9,8 +9,9 @@ import {
   Button,
   Textarea,
   Table,
+  ActionIcon
 } from '@mantine/core';
-import { MdOutlineMailOutline, MdMap } from 'react-icons/md';
+import { MdOutlineMailOutline, MdMap, MdOutlineHouse } from 'react-icons/md';
 import { dummyData } from '../dummyData';
 
 export const HostLookup = () => {
@@ -23,7 +24,15 @@ export const HostLookup = () => {
       <td>{element.name}</td>
       <td>{element.capacity}</td>
       <td>
-        <Link href={element.url}>{element.url}</Link>
+        <Link passHref href={element.url}>
+          {/* <ActionIcon  variant="light" color='violet'> */}
+          <Button  variant="light"size='xs'>
+
+          <MdOutlineHouse style={{ height: '1rem', width: '1rem' }} />
+          Contact
+          </Button>
+          {/* </ActionIcon> */}
+        </Link>
       </td>
     </tr>
   ));
@@ -36,13 +45,13 @@ export const HostLookup = () => {
           Available hosts
         </Title>
 
-        <Table striped>
+        <Table striped highlightOnHover>
           <thead>
             <tr>
               <th>Name</th>
               <th>Location</th>
-              <th>Capacity</th>
-              <th>Learn more</th>
+              <th>Cap.</th>
+              <th>Contact host</th>
             </tr>
           </thead>
           <tbody>{rows}</tbody>

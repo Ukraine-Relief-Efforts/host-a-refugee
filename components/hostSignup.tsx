@@ -48,13 +48,13 @@ export const HostSignup = () => {
             label="City / Region Name"
             required
           />
-          <NumberInput
+          {/* <NumberInput
             {...register('capacity', { required: true })}
             defaultValue={1}
             placeholder="People capacity"
             label="People capacity"
             required
-          />
+          /> */}
           <Textarea
             {...register('aboutHost')}
             placeholder="About the accomodation and Rules"

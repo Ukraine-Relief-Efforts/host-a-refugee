@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import Link from 'next/link';
 import {
   Space,
   Paper,
@@ -10,57 +11,7 @@ import {
   Table,
 } from '@mantine/core';
 import { MdOutlineMailOutline, MdMap } from 'react-icons/md';
-
-const dummyData = [
-  {
-    name: 'Place no1.',
-    location: 'Poland, Warsaw',
-    capacity: 3,
-    url: '/place-no-1',
-  },
-  {
-    name: 'Place no1.',
-    location: 'Romania, Bucuresti',
-    capacity: 3,
-    url: '/place-no-2',
-  },
-  {
-    name: 'Place no1.',
-    location: 'Modova, Chisinau',
-    capacity: 3,
-    url: '/place-no-3',
-  },
-  {
-    name: 'Place no1.',
-    location: 'Poland, Warsaw',
-    capacity: 3,
-    url: '/place-no-1',
-  },
-  {
-    name: 'Place no1.',
-    location: 'Romania, Bucuresti',
-    capacity: 3,
-    url: '/place-no-2',
-  },
-  {
-    name: 'Place no1.',
-    location: 'Modova, Chisinau',
-    capacity: 3,
-    url: '/place-no-3',
-  },
-  {
-    name: 'Place no1.',
-    location: 'Romania, Bucuresti',
-    capacity: 3,
-    url: '/place-no-2',
-  },
-  {
-    name: 'Place no1.',
-    location: 'Modova, Chisinau',
-    capacity: 3,
-    url: '/place-no-3',
-  },
-];
+import { dummyData } from '../dummyData';
 
 export const HostLookup = () => {
   const { register, handleSubmit } = useForm();
@@ -72,7 +23,7 @@ export const HostLookup = () => {
       <td>{element.name}</td>
       <td>{element.capacity}</td>
       <td>
-        <a href="{element.url}">{element.url}</a>
+        <Link href={element.url}>{element.url}</Link>
       </td>
     </tr>
   ));

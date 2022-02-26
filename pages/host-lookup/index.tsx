@@ -16,7 +16,7 @@ import {
   Input,
   MediaQuery,
 } from '@mantine/core';
-import { Nav, HostLookup, Footer } from '../components';
+import { Nav, HostLookup, Footer } from '../../components';
 
 const Home = () => {
   return (

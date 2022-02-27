@@ -1,25 +1,93 @@
-import { Container, Space, Title, Breadcrumbs, Anchor } from '@mantine/core';
+import Link from 'next/link';
+import {
+  Menu,
+  Button,
+  Center,
+  Space,
+  Title,
+  Text,
+  Breadcrumbs,
+  Anchor,
+  Avatar,
+} from '@mantine/core';
+import { useSession, signIn, signOut } from 'next-auth/react';
 
-export const Nav = () => (
-  <>
-    <Space h="xl" />
-    <Container padding={0}>
-      <Title order={1}>🇺🇦 Help Ukraine</Title>
-      <Space h="lg" />
-      <Breadcrumbs separator="|">
-        {[
-          { title: 'Home', href: 'http://localhost:3000/' },
-          {
-            title: 'Available places',
-            href: 'http://localhost:3000/host-lookup',
-          },
-          { title: 'Become a host', href: 'http://localhost:3000/host-signup' },
-        ].map((item, index) => (
-          <Anchor key={index} href={item.href} >
-            {item.title}
-          </Anchor>
-        ))}
-      </Breadcrumbs>
-    </Container>
-  </>
-);
+const routes = [
+  { title: 'Home', href: '/' },
+  {
+    title: 'Available places',
+    href: '/host-lookup',
+    protected: true,
+  },
+  { title: 'Become a host', href: '/host-signup' },
+];
+
+const authButtonStyle: any = {
+  position: 'absolute',
+  display: 'flex',
+  right: 0,
+  top: 0,
+  alignContent: 'flex-end',
+};
+
+export const Nav = () => {
+  const { data: session } = useSession();
+
+  return (
+    <>
+      <Space h="xl" />
+      <div
+        style={{
+          position: 'relative',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          width: '100%',
+        }}
+      >
+        <Center>
+          <Title order={1}>🇺🇦 Host a Refugee</Title>
+        </Center>
+        {session && session.user ? (
+          <Menu
+            sx={authButtonStyle}
+            placement="end"
+            control={
+              <Avatar
+                size="lg"
+                radius="xl"
+                style={{ cursor: 'pointer' }}
+                src={session.user!.image!}
+              />
+            }
+          >
+            <Menu.Item>
+              <Link href="/profile" passHref>
+                <a style={{ textDecoration: 'none', color: 'black' }}>
+                  My Profile
+                </a>
+              </Link>
+            </Menu.Item>
+            <Menu.Item onClick={() => signOut()}>Logout</Menu.Item>
+          </Menu>
+        ) : (
+          <Button sx={authButtonStyle} size="md" onClick={() => signIn()}>
+            Sign In
+          </Button>
+        )}
+        <Space h="lg" />
+        <Breadcrumbs separator="|">
+          {routes.map((item, index) => (
+            <Anchor key={`${index}-${item}`}>
+              <Link href={item.href} passHref>
+                <Text color="blue" size="lg">
+                  {item.title}
+                </Text>
+              </Link>
+            </Anchor>
+          ))}
+        </Breadcrumbs>
+      </div>
+    </>
+  );
+};

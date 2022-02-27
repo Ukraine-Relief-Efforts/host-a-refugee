@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { Layout, HostSignup } from '../components';
 
-const Home = () => {
+const HostSignupPage = () => {
   return (
     <>
       <Head>
@@ -17,4 +17,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HostSignupPage;

@@ -1,5 +1,6 @@
-import { ReactNode } from 'react';
-import { Container, Button, Center } from '@mantine/core';
+import { ReactNode, useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import { Container, Modal, Title, Text, Space } from '@mantine/core';
 import { Nav, Footer } from './';
 import { useSession } from 'next-auth/react';
 
@@ -9,14 +10,28 @@ interface LayoutProps {
 }
 
 export const Layout = ({ children, requireAuth = true }: LayoutProps) => {
+  const { push } = useRouter();
   const { data: session } = useSession();
+  const [opened, setOpened] = useState<boolean>(false);
+
+  const handleClose = () => {
+    setOpened(false);
+    return push('/');
+  };
+
+  useEffect(() => {
+    if (!session) return setOpened(true);
+  }, [session]);
 
   const renderContent = () => {
     if (requireAuth && !session) {
       return (
-        <Center>
-          Authentication required. Please login with the button above.
-        </Center>
+        <Modal opened={opened} onClose={handleClose} size="md" radius="md">
+          <Title>Authentication required</Title>
+          <Space h="xl" />
+          <Text size="lg">Please login above ↗ to access this page.</Text>
+          <Space h="xl" />
+        </Modal>
       );
     }
 

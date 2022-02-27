@@ -1,7 +1,6 @@
 import Head from 'next/head';
 import { Space, Paper } from '@mantine/core';
 import { Layout } from '../components';
-import { useSession } from 'next-auth/react';
 
 import matter from 'gray-matter';
 import fs from 'fs';
@@ -14,10 +13,6 @@ interface HomeProps {
 }
 
 const Home = ({ metadata, content }: HomeProps) => {
-  const { data: session } = useSession();
-
-  console.log(session);
-
   return (
     <>
       <Head>

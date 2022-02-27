@@ -44,7 +44,7 @@ const Home = ({ metadata, content }: HomeProps) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Layout>
+      <Layout requireAuth={false}>
         <Space h="xl" />
         <Paper padding="lg" shadow="sm" radius="md" withBorder>
           <div

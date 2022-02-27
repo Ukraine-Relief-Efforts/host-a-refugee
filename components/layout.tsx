@@ -1,9 +1,27 @@
-import { Container, Button } from '@mantine/core';
+import { ReactNode } from 'react';
+import { Container, Button, Center } from '@mantine/core';
 import { Nav, Footer } from './';
-import { useSession, signIn } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 
-export const Layout = ({ children }: any) => {
+interface LayoutProps {
+  children: ReactNode;
+  requireAuth?: boolean;
+}
+
+export const Layout = ({ children, requireAuth = true }: LayoutProps) => {
   const { data: session } = useSession();
+
+  const renderContent = () => {
+    if (requireAuth && !session) {
+      return (
+        <Center>
+          Authentication required. Please login with the button above.
+        </Center>
+      );
+    }
+
+    return children;
+  };
 
   return (
     <Container
@@ -11,7 +29,7 @@ export const Layout = ({ children }: any) => {
       style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}
     >
       <Nav />
-      {session ? children : <Button onClick={() => signIn()}>Sign In</Button>}
+      {renderContent()}
       <Footer />
     </Container>
   );

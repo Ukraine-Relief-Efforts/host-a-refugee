@@ -11,7 +11,7 @@
 # next.js
 /.next/
 /out/
-
+.trunk
 # production
 /build
 
@@ -36,3 +36,4 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+.markdownlint.yaml

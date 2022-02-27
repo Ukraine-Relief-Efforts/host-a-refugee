@@ -23,7 +23,7 @@ export default Home;
 export async function getServerSideProps() {
   const response = await axios({
     method: 'GET',
-    url: AIRTABLE_URL,
+    url: `${AIRTABLE_URL}?maxRecords=50&view=Grid%20view`,
     headers: { Authorization: `Bearer ${AIRTABLE_API_KEY}` },
   });
 

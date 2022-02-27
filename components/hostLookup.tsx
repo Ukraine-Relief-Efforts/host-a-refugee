@@ -19,13 +19,15 @@ export const HostLookup = ({ hosts }: HostLookupProps) => {
   const rows = hosts?.map((element) => (
     <tr key={element.fields.firstName}>
       <td>{element.fields.cityRegion}</td>
-      <td>{element.fields.firstName} {element.fields.lastName}</td>
+      <td>
+        {element.fields.firstName} {element.fields.lastName}
+      </td>
       <td>{element.fields.hostCapacity}</td>
       <td>
-          <Button variant="light" size="xs">
-            <MdOutlineHouse style={{ height: '1rem', width: '1rem' }} />
-            Contact
-          </Button>
+        <Button variant="light" size="xs">
+          <MdOutlineHouse style={{ height: '1rem', width: '1rem' }} />
+          Contact
+        </Button>
       </td>
     </tr>
   ));
@@ -37,22 +39,19 @@ export const HostLookup = ({ hosts }: HostLookupProps) => {
         <Title order={3} style={{ padding: '1rem' }}>
           Available hosts
         </Title>
-
-        <Table
-          striped
-          horizontalSpacing={5}
-          style={{ display: 'block', height: 350, overflow: 'auto' }}
-        >
-          <thead>
-            <tr>
-              <th>Location</th>
-              <th>Name</th>
-              <th>Cap.</th>
-              <th>Contact host</th>
-            </tr>
-          </thead>
-          <tbody>{rows}</tbody>
-        </Table>
+        <div style={{ width: '100%', maxHeight: 500, overflow: 'auto' }}>
+          <Table striped horizontalSpacing={5}>
+            <thead>
+              <tr>
+                <th>Location</th>
+                <th>Name</th>
+                <th>Cap.</th>
+                <th>Contact host</th>
+              </tr>
+            </thead>
+            <tbody>{rows}</tbody>
+          </Table>
+        </div>
       </Paper>
       <Space h="xl" />
 

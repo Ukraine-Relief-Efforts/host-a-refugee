@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
 import {
   Space,
   Paper,
@@ -9,12 +8,47 @@ import {
   Textarea,
   Table,
   ActionIcon,
+  NumberInput,
+  Checkbox,
 } from '@mantine/core';
-import { MdOutlineMailOutline, MdMap, MdOutlineHouse } from 'react-icons/md';
+import { MdPhone, MdMap, MdOutlineHouse } from 'react-icons/md';
+import { useForm } from '@mantine/hooks';
+import axios from 'axios';
+import { useSession } from 'next-auth/react';
+import { DateRangePicker } from '@mantine/dates';
 
 export const HostLookup = ({ hosts }: HostLookupProps) => {
-  const { register, handleSubmit } = useForm();
-  const [data, setData] = useState('');
+  const { data: session } = useSession();
+  const [value, setValue] = useState<[Date | null, Date | null]>([
+    new Date(),
+    new Date(),
+  ]);
+
+  const form = useForm({
+    initialValues: {
+      phoneNumber: '',
+      cityRegion: '',
+      accomodationDetails: '',
+      groupSize: 1,
+      termsOfService: false,
+    },
+  });
+
+  const onSubmitHandler = (values: typeof form['values']) => {
+    console.log(values);
+    axios({
+      method: 'POST',
+      url: '/api/seekers',
+      data: {
+        ...values,
+        dateStart: value[0],
+        dateEnd: value[1],
+        name: session?.user?.name,
+        email: session?.user?.email,
+      },
+    });
+    form.reset();
+  };
 
   const rows = hosts?.map((element) => (
     <tr key={element.fields.name}>
@@ -57,40 +91,47 @@ export const HostLookup = ({ hosts }: HostLookupProps) => {
         <Title order={3}>Find a host</Title>
         <Space h="lg" />
 
-        <form onSubmit={handleSubmit((data) => setData(JSON.stringify(data)))}>
+        <form onSubmit={form.onSubmit(onSubmitHandler)}>
           <TextInput
-            {...register('firstName', { required: true })}
-            placeholder="First Name"
-            label="First Name"
+            {...form.getInputProps('phoneNumber')}
+            icon={<MdPhone />}
+            placeholder="+03 123 456 789"
+            label="Phone Number"
             required
           />
           <TextInput
-            {...register('lastName', { required: true })}
-            placeholder="Last Name"
-            label="Last Name"
-            required
-          />
-          <TextInput
-            {...register('email', { required: true })}
-            icon={<MdOutlineMailOutline />}
-            placeholder="Email"
-            label="Email address"
-            required
-          />
-          <TextInput
-            {...register('location', { required: true })}
+            {...form.getInputProps('cityRegion')}
             icon={<MdMap />}
             placeholder="City"
             label="City / Region Name"
             required
           />
+          <DateRangePicker
+            label="Accomodation dates"
+            placeholder="Pick dates range"
+            value={value}
+            onChange={setValue}
+          />
           <Textarea
-            {...register('aboutHost')}
+            {...form.getInputProps('accomodationDetails')}
             placeholder="About the accomodation and Rules"
             label="Accomodation details"
           />
+          <NumberInput
+            defaultValue={2}
+            {...form.getInputProps('groupSize')}
+            placeholder="Number of people"
+            label="Number of people"
+            required
+          />
+          <Space h="lg" />
+          <Checkbox
+            {...form.getInputProps('termsOfService')}
+            label="I agree to sell my privacy"
+            required
+          />
+          <Space h="xl" />
 
-          <p>{data}</p>
           <Button type="submit" color="teal">
             Submit
           </Button>

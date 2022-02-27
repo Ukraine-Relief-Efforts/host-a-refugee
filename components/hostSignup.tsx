@@ -33,7 +33,7 @@ export const HostSignup = () => {
       phoneNumber: '',
       cityRegion: '',
       accomodationDetails: '',
-      hostCapacity: 0,
+      hostCapacity: 1,
       languages: '',
       termsOfService: false,
     },

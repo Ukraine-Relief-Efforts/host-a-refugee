@@ -11,13 +11,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       email,
       cityRegion,
       accomodationDetails,
-      hostCapacity,
-      languages,
+      groupSize,
+      dateStart,
+      dateEnd,
     } = req.body;
     try {
       const response = await axios({
         method: 'POST',
-        url: `${AIRTABLE_URL}/Hosts`,
+        url: `${AIRTABLE_URL}/Seekers`,
         data: {
           records: [
             {
@@ -27,8 +28,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 email,
                 cityRegion,
                 accomodationDetails,
-                hostCapacity,
-                languages,
+                groupSize,
+                dateStart,
+                dateEnd,
               },
             },
           ],

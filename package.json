@@ -17,6 +17,7 @@
     "@types/marked": "^4.0.2",
     "axios": "^0.26.0",
     "dayjs": "^1.10.7",
+    "dotenv": "^16.0.0",
     "gray-matter": "^4.0.3",
     "marked": "^4.0.12",
     "next": "12.1.0",

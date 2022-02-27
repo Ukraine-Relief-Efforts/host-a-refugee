@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import Link from 'next/link';
 import {
   Space,
   Paper,
@@ -9,30 +8,24 @@ import {
   Button,
   Textarea,
   Table,
-  ActionIcon
+  ActionIcon,
 } from '@mantine/core';
 import { MdOutlineMailOutline, MdMap, MdOutlineHouse } from 'react-icons/md';
-import { dummyData } from '../dummyData';
 
-export const HostLookup = () => {
+export const HostLookup = ({ hosts }: HostLookupProps) => {
   const { register, handleSubmit } = useForm();
   const [data, setData] = useState('');
 
-  const rows = dummyData.map((element) => (
-    <tr key={element.name}>
-      <td>{element.location}</td>
-      <td>{element.name}</td>
-      <td>{element.capacity}</td>
+  const rows = hosts?.map((element) => (
+    <tr key={element.fields.firstName}>
+      <td>{element.fields.cityRegion}</td>
+      <td>{element.fields.firstName} {element.fields.lastName}</td>
+      <td>{element.fields.hostCapacity}</td>
       <td>
-        <Link passHref href={element.url}>
-          {/* <ActionIcon  variant="light" color='violet'> */}
-          <Button  variant="light"size='xs'>
-
-          <MdOutlineHouse style={{ height: '1rem', width: '1rem' }} />
-          Contact
+          <Button variant="light" size="xs">
+            <MdOutlineHouse style={{ height: '1rem', width: '1rem' }} />
+            Contact
           </Button>
-          {/* </ActionIcon> */}
-        </Link>
       </td>
     </tr>
   ));
@@ -45,11 +38,15 @@ export const HostLookup = () => {
           Available hosts
         </Title>
 
-        <Table striped highlightOnHover>
+        <Table
+          striped
+          horizontalSpacing={5}
+          style={{ display: 'block', height: 350, overflow: 'auto' }}
+        >
           <thead>
             <tr>
-              <th>Name</th>
               <th>Location</th>
+              <th>Name</th>
               <th>Cap.</th>
               <th>Contact host</th>
             </tr>
@@ -106,3 +103,19 @@ export const HostLookup = () => {
     </>
   );
 };
+
+type Host = {
+  id: string;
+  fields: {
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+    email: string;
+    cityRegion: string;
+    accomodationDetails: string;
+    hostCapacity: number;
+  };
+  createdTime: string;
+};
+
+type HostLookupProps = { hosts: Host[] };

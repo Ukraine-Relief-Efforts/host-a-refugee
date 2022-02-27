@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import {
-  Container,
+  Menu,
   Button,
   Center,
   Space,
@@ -10,7 +10,7 @@ import {
   Anchor,
   Avatar,
 } from '@mantine/core';
-import { useSession, signIn } from 'next-auth/react';
+import { useSession, signIn, signOut } from 'next-auth/react';
 
 const routes = [
   { title: 'Home', href: '/' },
@@ -22,14 +22,21 @@ const routes = [
   { title: 'Become a host', href: '/host-signup' },
 ];
 
+const authButtonStyle: any = {
+  position: 'absolute',
+  display: 'flex',
+  right: 0,
+  top: 0,
+  alignContent: 'flex-end',
+};
+
 export const Nav = () => {
   const { data: session } = useSession();
 
   return (
     <>
       <Space h="xl" />
-      <Container
-        padding={0}
+      <div
         style={{
           position: 'relative',
           display: 'flex',
@@ -41,20 +48,23 @@ export const Nav = () => {
         <Center>
           <Title order={1}>🇺🇦 Host a Refugee</Title>
         </Center>
-        {session ? (
-          <Avatar src={session.user!.image!} />
-        ) : (
-          <Button
-            style={{
-              position: 'absolute',
-              display: 'flex',
-              right: 0,
-              top: 0,
-              alignContent: 'flex-end',
-            }}
-            size="md"
-            onClick={() => signIn()}
+        {session && session.user ? (
+          <Menu
+            sx={authButtonStyle}
+            placement="end"
+            control={
+              <Avatar
+                size="lg"
+                radius="xl"
+                style={{ cursor: 'pointer' }}
+                src={session.user!.image!}
+              />
+            }
           >
+            <Menu.Item onClick={() => signOut()}>Logout</Menu.Item>
+          </Menu>
+        ) : (
+          <Button sx={authButtonStyle} size="md" onClick={() => signIn()}>
             Sign In
           </Button>
         )}
@@ -70,7 +80,7 @@ export const Nav = () => {
             </Anchor>
           ))}
         </Breadcrumbs>
-      </Container>
+      </div>
     </>
   );
 };

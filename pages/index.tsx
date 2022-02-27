@@ -1,26 +1,9 @@
 import Head from 'next/head';
-import { useEffect, useState } from 'react';
-import {
-  Divider,
-  Container,
-  Grid,
-  Space,
-  Button,
-  Paper,
-  Anchor,
-  Text,
-  Group,
-  Badge,
-  Center,
-  InputWrapper,
-  Input,
-  MediaQuery,
-} from '@mantine/core';
-import { DateRangePicker } from '@mantine/dates';
+import { Space, Paper } from '@mantine/core';
 import { Layout } from '../components';
+import { useSession } from 'next-auth/react';
 
 import matter from 'gray-matter';
-import axios from 'axios';
 import fs from 'fs';
 import { join } from 'path';
 import { marked } from 'marked';
@@ -31,10 +14,9 @@ interface HomeProps {
 }
 
 const Home = ({ metadata, content }: HomeProps) => {
-  const [dateRange, setDateRange] = useState<[Date, Date]>([
-    new Date(),
-    new Date(),
-  ]);
+  const { data: session } = useSession();
+
+  console.log(session);
 
   return (
     <>

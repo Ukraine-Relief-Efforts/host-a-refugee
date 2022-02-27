@@ -9,12 +9,12 @@ export const Nav = () => (
       <Space h="lg" />
       <Breadcrumbs separator="|">
         {[
-          { title: 'Home', href: 'http://localhost:3000/' },
+          { title: 'Home', href: '/' },
           {
             title: 'Available places',
-            href: 'http://localhost:3000/host-lookup',
+            href: '/host-lookup',
           },
-          { title: 'Become a host', href: 'http://localhost:3000/host-signup' },
+          { title: 'Become a host', href: '/host-signup' },
         ].map((item, index) => (
           <Anchor key={index}>
             <Link href={item.href}>{item.title}</Link>

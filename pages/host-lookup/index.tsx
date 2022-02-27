@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { Layout, HostLookup } from '../../components';
 
-const Home = () => {
+const HostLookupPage = () => {
   return (
     <>
       <Head>
@@ -17,4 +17,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HostLookupPage;

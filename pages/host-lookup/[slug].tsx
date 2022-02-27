@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { Layout } from '../../components';
 import { dummyData } from '../../dummyData';
 
-export const Host = ({ name, location, capacity, url }: HostPageProps) => {
+export const HostPage = ({ name, location, capacity, url }: HostPageProps) => {
   return (
     <>
       <Head>
@@ -47,4 +47,4 @@ type HostPageProps = {
   url: string;
 };
 
-export default Host;
+export default HostPage;

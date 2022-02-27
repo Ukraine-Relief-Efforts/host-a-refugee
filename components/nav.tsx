@@ -61,6 +61,13 @@ export const Nav = () => {
               />
             }
           >
+            <Menu.Item>
+              <Link href="/profile" passHref>
+                <a style={{ textDecoration: 'none', color: 'black' }}>
+                  My Profile
+                </a>
+              </Link>
+            </Menu.Item>
             <Menu.Item onClick={() => signOut()}>Logout</Menu.Item>
           </Menu>
         ) : (

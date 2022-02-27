@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { Layout } from '../components';
 
-const Home = () => {
+const TermsOfServicePage = () => {
   return (
     <>
       <Head>
@@ -19,4 +19,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default TermsOfServicePage;

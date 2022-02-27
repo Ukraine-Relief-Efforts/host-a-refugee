@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { Container, Space, Title, Breadcrumbs, Anchor } from '@mantine/core';
 
 export const Nav = () => (
@@ -16,8 +15,8 @@ export const Nav = () => (
           },
           { title: 'Become a host', href: 'http://localhost:3000/host-signup' },
         ].map((item, index) => (
-          <Anchor key={index}>
-            <Link href={item.href}>{item.title}</Link>
+          <Anchor key={index} href={item.href} >
+            {item.title}
           </Anchor>
         ))}
       </Breadcrumbs>

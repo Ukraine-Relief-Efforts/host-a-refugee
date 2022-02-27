@@ -80,7 +80,7 @@ export const Nav = () => {
           {routes.map((item, index) => (
             <Anchor key={`${index}-${item}`}>
               <Link href={item.href} passHref>
-                <Text color="blue" size="lg">
+                <Text color="blue" size="md">
                   {item.title}
                 </Text>
               </Link>

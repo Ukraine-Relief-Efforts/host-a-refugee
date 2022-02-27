@@ -1,4 +1,5 @@
 import { useForm } from '@mantine/hooks';
+import { useSession } from 'next-auth/react';
 
 import {
   Space,
@@ -25,27 +26,31 @@ const languagesOptions = [
 ];
 
 export const HostSignup = () => {
+  const { data: session } = useSession();
+
   const form = useForm({
     initialValues: {
-      firstName: '',
-      lastName: '',
       phoneNumber: '',
-      email: '',
       cityRegion: '',
       accomodationDetails: '',
       hostCapacity: 0,
       languages: '',
       termsOfService: false,
     },
-
-    validationRules: {
-      email: (value) => /^\S+@\S+$/.test(value),
-    },
   });
 
   const onSubmitHandler = (values: typeof form['values']) => {
     console.log(values);
-    axios({ method: 'POST', url: '/api/host', data: values });
+    axios({
+      method: 'POST',
+      url: '/api/host',
+      data: {
+        ...values,
+        name: session?.user?.name,
+        email: session?.user?.email,
+      },
+    });
+    form.reset();
   };
 
   return (
@@ -57,29 +62,10 @@ export const HostSignup = () => {
 
         <form onSubmit={form.onSubmit(onSubmitHandler)}>
           <TextInput
-            {...form.getInputProps('firstName')}
-            placeholder="First Name"
-            label="First Name"
-            required
-          />
-          <TextInput
-            {...form.getInputProps('lastName')}
-            placeholder="Last Name"
-            label="Last Name"
-            required
-          />
-          <TextInput
             {...form.getInputProps('phoneNumber')}
             icon={<MdPhone />}
             placeholder="+03 123 456 789"
             label="Phone Number"
-            required
-          />
-          <TextInput
-            {...form.getInputProps('email')}
-            icon={<MdOutlineMailOutline />}
-            placeholder="Email"
-            label="Email address"
             required
           />
           <TextInput
@@ -95,7 +81,7 @@ export const HostSignup = () => {
             label="Accomodation details"
           />
           <NumberInput
-            defaultValue={1}
+            defaultValue={2}
             {...form.getInputProps('hostCapacity')}
             placeholder="Number of people"
             label="Host capacity"

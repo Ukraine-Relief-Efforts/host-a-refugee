@@ -6,8 +6,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
     console.log('Called with', req.body);
     const {
-      firstName,
-      lastName,
+      name,
       phoneNumber,
       email,
       cityRegion,
@@ -23,8 +22,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           records: [
             {
               fields: {
-                firstName,
-                lastName,
+                name,
                 phoneNumber,
                 email,
                 cityRegion,

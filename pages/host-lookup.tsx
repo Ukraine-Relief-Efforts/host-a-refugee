@@ -35,8 +35,7 @@ export async function getServerSideProps() {
 type Host = {
   id: string;
   fields: {
-    firstName: string;
-    lastName: string;
+    name: string;
     phoneNumber: string;
     email: string;
     cityRegion: string;

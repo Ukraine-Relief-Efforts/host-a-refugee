@@ -17,11 +17,9 @@ export const HostLookup = ({ hosts }: HostLookupProps) => {
   const [data, setData] = useState('');
 
   const rows = hosts?.map((element) => (
-    <tr key={element.fields.firstName}>
+    <tr key={element.fields.name}>
       <td>{element.fields.cityRegion}</td>
-      <td>
-        {element.fields.firstName} {element.fields.lastName}
-      </td>
+      <td>{element.fields.name}</td>
       <td>{element.fields.hostCapacity}</td>
       <td>
         <Button variant="light" size="xs">
@@ -106,8 +104,7 @@ export const HostLookup = ({ hosts }: HostLookupProps) => {
 type Host = {
   id: string;
   fields: {
-    firstName: string;
-    lastName: string;
+    name: string;
     phoneNumber: string;
     email: string;
     cityRegion: string;

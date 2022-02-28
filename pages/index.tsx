@@ -30,7 +30,7 @@ export default function HomePage({ hosts, refugees }: HomeProps) {
   );
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps({ req, res }: any) {
   const { data: refugees } = await axios({
     method: 'GET',
     url: `${AIRTABLE_URL}/Hosts?filterByFormula=%28%7BuserType%7D%20%3D%20%27refugee%27%29`,
@@ -44,6 +44,11 @@ export async function getServerSideProps() {
       Authorization: `Bearer ${AIRTABLE_API_KEY}`,
     },
   });
+
+  res.setHeader(
+    'Cache-Control',
+    'public, s-maxage=120, stale-while-revalidate=59'
+  )
 
   return {
     props: { refugees: refugees.records, hosts: hosts.records },

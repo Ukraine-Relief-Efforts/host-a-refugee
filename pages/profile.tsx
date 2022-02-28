@@ -1,10 +1,11 @@
 import Head from 'next/head';
-import { Layout } from '../components';
+import { Layout, HostSignup } from '../components';
 import { Space, Paper, Text, Title } from '@mantine/core';
 import { useUser } from '../hooks';
 
 export default function ProfilePage() {
   const { data, loading, error } = useUser();
+  console.log(data);
 
   const renderUserInfo = () => {
     if (loading) {
@@ -14,7 +15,7 @@ export default function ProfilePage() {
       return <Text color="red">Error: {error}</Text>;
     }
 
-    return (
+    return data?.user?.email ? (
       <>
         <Text size="md">{`Email: ${data?.user?.email}`}</Text>
         <Text size="md">{`Name: ${data?.user?.name}`}</Text>
@@ -24,6 +25,8 @@ export default function ProfilePage() {
         <Text size="md">{`Host Capacity: ${data?.user?.hostCapacity}`}</Text>
         <Text size="md">{`Spoken Languages ${data?.user?.languages}`}</Text>
       </>
+    ) : (
+      <HostSignup />
     );
   };
 

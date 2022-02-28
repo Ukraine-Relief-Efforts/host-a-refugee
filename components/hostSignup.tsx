@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { useForm } from '@mantine/hooks';
 import { useSession } from 'next-auth/react';
 
@@ -27,6 +28,7 @@ const languagesOptions = [
 
 export const HostSignup = () => {
   const { data: session } = useSession();
+  const { reload } = useRouter();
 
   const form = useForm({
     initialValues: {
@@ -49,7 +51,7 @@ export const HostSignup = () => {
         email: session?.user?.email,
       },
     });
-    form.reset();
+    return reload();
   };
 
   return (

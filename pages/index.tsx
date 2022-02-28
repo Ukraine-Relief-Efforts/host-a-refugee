@@ -1,47 +1,51 @@
 import Head from 'next/head';
-import { Space, Paper } from '@mantine/core';
-import { Layout } from '../components';
-
-import matter from 'gray-matter';
-import fs from 'fs';
-import { join } from 'path';
-import { marked } from 'marked';
+import { Space, Paper, Text } from '@mantine/core';
+import { UsersLookup, Layout } from '../components';
+import axios from 'axios';
+import { Host } from '../models';
+import { AIRTABLE_URL, AIRTABLE_API_KEY } from '../config';
 
 interface HomeProps {
-  metadata: any;
-  content: string;
+  hosts: Host[];
+  refugees: Host[];
 }
 
-export default function HomePage({ metadata, content }: HomeProps) {
+export default function HomePage({ hosts, refugees }: HomeProps) {
   return (
     <>
       <Head>
-        <title>{metadata.title || 'Refugee app'}</title>
-        <meta name={metadata.meta_name} content={metadata.meta_content} />
+        <title>Refugee app</title>
+        <meta name="" content="" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <Layout requireAuth={false}>
         <Space h="xl" />
         <Paper padding="lg" shadow="sm" radius="md" withBorder>
-          <div
-            dangerouslySetInnerHTML={{ __html: marked.parse(content) }}
-          ></div>
+          <Text>About us</Text>
         </Paper>
+        <UsersLookup hosts={hosts} refugees={refugees} />
       </Layout>
     </>
   );
 }
 
-const CONTENT_PATH = join(process.cwd(), 'content.mdx');
+export async function getServerSideProps() {
+  const { data: refugees } = await axios({
+    method: 'GET',
+    url: `${AIRTABLE_URL}/Hosts?filterByFormula=%28%7BuserType%7D%20%3D%20%27refugee%27%29`,
+    headers: { Authorization: `Bearer ${AIRTABLE_API_KEY}` },
+  });
 
-export async function getStaticProps() {
-  const fileContents = fs.readFileSync(CONTENT_PATH);
-  const { data: metadata, content } = matter(fileContents);
-  return {
-    props: {
-      metadata,
-      content,
+  const { data: hosts } = await axios({
+    method: 'GET',
+    url: `${AIRTABLE_URL}/Hosts?filterByFormula=%28%7BuserType%7D%20%3D%20%27host%27%29`,
+    headers: {
+      Authorization: `Bearer ${AIRTABLE_API_KEY}`,
     },
+  });
+
+  return {
+    props: { refugees: refugees.records, hosts: hosts.records },
   };
 }

@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { Layout, HostSignup } from '../components';
+import { Layout, SignupForm } from '../components';
 
 const HostSignupPage = () => {
   return (
@@ -11,7 +11,7 @@ const HostSignupPage = () => {
       </Head>
 
       <Layout>
-        <HostSignup />
+        <SignupForm />
       </Layout>
     </>
   );

@@ -1,4 +1,4 @@
-import { Divider, Text, Anchor } from "@mantine/core";
+import { Divider, Text, Anchor } from '@mantine/core';
 
 export const Footer = () => (
   <div style={{ marginTop: 'auto', padding: '1rem 0rem' }}>

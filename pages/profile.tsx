@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { Layout, HostSignup } from '../components';
+import { Layout, SignupForm } from '../components';
 import { Space, Paper, Text, Title } from '@mantine/core';
 import { useUser } from '../hooks';
 
@@ -22,11 +22,11 @@ export default function ProfilePage() {
         <Text size="md">{`Phone Number: ${data?.user?.phoneNumber}`}</Text>
         <Text size="md">{`City / Region: ${data?.user?.cityRegion}`}</Text>
         <Text size="md">{`Accomodation Details: ${data?.user?.accomodationDetails}`}</Text>
-        <Text size="md">{`Host Capacity: ${data?.user?.hostCapacity}`}</Text>
+        <Text size="md">{`Host Capacity: ${data?.user?.groupSize}`}</Text>
         <Text size="md">{`Spoken Languages ${data?.user?.languages}`}</Text>
       </>
     ) : (
-      <HostSignup />
+      <SignupForm />
     );
   };
 

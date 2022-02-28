@@ -7,30 +7,36 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     console.log('Called with', req.body);
     const {
       name,
+      userType,
       phoneNumber,
       email,
       cityRegion,
       accomodationDetails,
       groupSize,
+      languages,
       dateStart,
       dateEnd,
+      avatar,
     } = req.body;
     try {
       const response = await axios({
         method: 'POST',
-        url: `${AIRTABLE_URL}/Seekers`,
+        url: `${AIRTABLE_URL}/Hosts`,
         data: {
           records: [
             {
               fields: {
                 name,
+                userType,
                 phoneNumber,
                 email,
                 cityRegion,
                 accomodationDetails,
                 groupSize,
+                languages,
                 dateStart,
                 dateEnd,
+                avatar,
               },
             },
           ],

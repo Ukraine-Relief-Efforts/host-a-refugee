@@ -12,7 +12,7 @@ interface HomeProps {
   content: string;
 }
 
-const Home = ({ metadata, content }: HomeProps) => {
+export default function HomePage({ metadata, content }: HomeProps) {
   return (
     <>
       <Head>
@@ -31,14 +31,17 @@ const Home = ({ metadata, content }: HomeProps) => {
       </Layout>
     </>
   );
-};
+}
 
 const CONTENT_PATH = join(process.cwd(), 'content.mdx');
 
-export const getStaticProps = async () => {
+export async function getStaticProps() {
   const fileContents = fs.readFileSync(CONTENT_PATH);
   const { data: metadata, content } = matter(fileContents);
-  return { props: { metadata, content } };
-};
-
-export default Home;
+  return {
+    props: {
+      metadata,
+      content,
+    },
+  };
+}

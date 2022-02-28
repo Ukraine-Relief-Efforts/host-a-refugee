@@ -8,6 +8,7 @@ declare const process: {
     GOOGLE_CLIENT_SECRET: string;
     TWITTER_CLIENT_ID: string;
     TWITTER_CLIENT_SECRET: string;
+    NEXTAUTH_SECRET: string;
   };
 };
 
@@ -23,4 +24,5 @@ export default NextAuth({
       version: '2.0',
     }),
   ],
+  secret: process.env.NEXTAUTH_SECRET,
 });

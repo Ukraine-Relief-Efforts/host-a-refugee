@@ -9,41 +9,40 @@ export default async function handler(
 ) {
   try {
     const session = await getSession({ req });
-    console.log(session);
 
     switch (req.method) {
       case 'GET':
-        const { data } = await axios({
+        const { data: user } = await axios({
           method: 'GET',
-          url: AIRTABLE_API_KEY,
+          url: `${AIRTABLE_URL}?maxRecords=1&filterByFormula=%28%7Bemail%7D%20%3D%20%27${session?.user?.email}%27%29`,
           headers: {
             Authorization: `Bearer ${AIRTABLE_API_KEY}`,
           },
         });
-        return res.status(200).json(data);
+        return res.status(200).json({ user: user.records[0]?.fields });
 
       case 'POST':
-        const response = await axios({
+        const { termsOfService, ...rest } = req.body;
+        const { data: created } = await axios({
           method: 'POST',
           url: AIRTABLE_URL,
           data: {
             records: [
               {
-                fields: {
-                  ...req.body,
-                },
+                fields: rest,
               },
             ],
             typecast: true,
           },
           headers: { Authorization: `Bearer ${AIRTABLE_API_KEY}` },
         });
-        return res.status(200).json({ created: response.data });
+        return res.status(200).json({ created });
 
       default:
         res.status(404).json({ info: 'method not implemented' });
     }
-  } catch (error) {
-    res.status(500).json({ error });
+  } catch (error: any) {
+    console.log(error.message);
+    res.status(500).json({ error: error.message });
   }
 }

@@ -1,10 +1,31 @@
 import Head from 'next/head';
-import { useSession } from 'next-auth/react';
 import { Layout } from '../components';
 import { Space, Paper, Text, Title } from '@mantine/core';
+import { useUser } from '../hooks';
 
 export default function ProfilePage() {
-  const { data: session } = useSession();
+  const { data, loading, error } = useUser();
+
+  const renderUserInfo = () => {
+    if (loading) {
+      return <Text>Loading...</Text>;
+    }
+    if (error) {
+      return <Text color="red">Error: {error}</Text>;
+    }
+
+    return (
+      <>
+        <Text size="md">{`Email: ${data?.user?.email}`}</Text>
+        <Text size="md">{`Name: ${data?.user?.name}`}</Text>
+        <Text size="md">{`Phone Number: ${data?.user?.phoneNumber}`}</Text>
+        <Text size="md">{`City / Region: ${data?.user?.cityRegion}`}</Text>
+        <Text size="md">{`Accomodation Details: ${data?.user?.accomodationDetails}`}</Text>
+        <Text size="md">{`Host Capacity: ${data?.user?.hostCapacity}`}</Text>
+        <Text size="md">{`Spoken Languages ${data?.user?.languages}`}</Text>
+      </>
+    );
+  };
 
   return (
     <>
@@ -20,8 +41,7 @@ export default function ProfilePage() {
           <Title order={3}>My Profile</Title>
           <Space h="lg" />
 
-          <Text size="md">{`Email: ${session?.user?.email}`}</Text>
-          <Text size="md">{`Name: ${session?.user?.name}`}</Text>
+          {renderUserInfo()}
         </Paper>
       </Layout>
     </>

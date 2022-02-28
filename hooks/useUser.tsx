@@ -1,19 +1,33 @@
 import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 
+interface Data {
+  user: {
+    email: string;
+    name: string;
+    phoneNumber: string;
+    cityRegion: string;
+    accomodationDetails: string;
+    hostCapacity: number;
+    languages: string[];
+  };
+}
+
 export function useUser() {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const isMounted = useRef(true);
+  const [data, setData] = useState<Data | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const isMounted = useRef(false);
 
   useEffect(() => {
+    isMounted.current = true;
+
     const fetchUser = async () => {
       try {
-        const response = await axios.get('/api/user');
-        isMounted.current && setUser(response.data);
+        const response = await axios.get('/api/hosts');
+        isMounted.current && setData(response.data);
       } catch (error: any) {
-        console.log(error);
+        console.error(error);
         isMounted.current && setError(error.message);
       }
 
@@ -27,5 +41,5 @@ export function useUser() {
     };
   }, []);
 
-  return { user, loading, error };
+  return { data, loading, error };
 }

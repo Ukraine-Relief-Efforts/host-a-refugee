@@ -1,15 +1,19 @@
+import { useEffect, useState } from 'react';
 import Head from 'next/head';
+import axios from 'axios';
 import { Layout } from '../components';
 import { Space, Paper, Text, Title } from '@mantine/core';
 import { useSession } from 'next-auth/react';
+import { useUserInfo } from '../hooks';
 
-const ProfilePage = () => {
+export default function ProfilePage() {
   const { data: session } = useSession();
+  const { userInfo, loading, error } = useUserInfo(session?.user?.email);
 
   return (
     <>
       <Head>
-        <title>Register as a host</title>
+        <title>Profile Page</title>
         <meta name="" content="" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -26,6 +30,4 @@ const ProfilePage = () => {
       </Layout>
     </>
   );
-};
-
-export default ProfilePage;
+}

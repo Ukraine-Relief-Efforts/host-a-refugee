@@ -23,7 +23,7 @@ const routes = [
   { title: 'Become a host', href: '/host-signup' },
 ];
 
-const authButtonStyle: any = {
+const authButtonStyle: {} = {
   position: 'absolute',
   display: 'flex',
   right: 0,

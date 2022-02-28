@@ -12,7 +12,7 @@ import {
   MultiSelect,
   Checkbox,
 } from '@mantine/core';
-import { MdOutlineMailOutline, MdMap, MdPhone } from 'react-icons/md';
+import { MdMap, MdPhone } from 'react-icons/md';
 import axios from 'axios';
 
 const languagesOptions = [
@@ -40,10 +40,9 @@ export const HostSignup = () => {
   });
 
   const onSubmitHandler = (values: typeof form['values']) => {
-    console.log(values);
     axios({
       method: 'POST',
-      url: '/api/host',
+      url: '/api/hosts',
       data: {
         ...values,
         name: session?.user?.name,

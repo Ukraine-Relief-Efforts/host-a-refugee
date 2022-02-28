@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { useForm } from '@mantine/hooks';
 import { useSession } from 'next-auth/react';
 
@@ -12,7 +13,7 @@ import {
   MultiSelect,
   Checkbox,
 } from '@mantine/core';
-import { MdOutlineMailOutline, MdMap, MdPhone } from 'react-icons/md';
+import { MdMap, MdPhone } from 'react-icons/md';
 import axios from 'axios';
 
 const languagesOptions = [
@@ -27,6 +28,7 @@ const languagesOptions = [
 
 export const HostSignup = () => {
   const { data: session } = useSession();
+  const { reload } = useRouter();
 
   const form = useForm({
     initialValues: {
@@ -40,17 +42,16 @@ export const HostSignup = () => {
   });
 
   const onSubmitHandler = (values: typeof form['values']) => {
-    console.log(values);
     axios({
       method: 'POST',
-      url: '/api/host',
+      url: '/api/hosts',
       data: {
         ...values,
         name: session?.user?.name,
         email: session?.user?.email,
       },
     });
-    form.reset();
+    return reload();
   };
 
   return (

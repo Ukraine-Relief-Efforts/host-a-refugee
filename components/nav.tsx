@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import {
   Menu,
   Button,
@@ -22,7 +23,7 @@ const routes = [
   { title: 'Become a host', href: '/host-signup' },
 ];
 
-const authButtonStyle: any = {
+const authButtonStyle: {} = {
   position: 'absolute',
   display: 'flex',
   right: 0,
@@ -31,6 +32,7 @@ const authButtonStyle: any = {
 };
 
 export const Nav = () => {
+  const { push } = useRouter();
   const { data: session } = useSession();
 
   return (
@@ -61,13 +63,7 @@ export const Nav = () => {
               />
             }
           >
-            <Menu.Item>
-              <Link href="/profile" passHref>
-                <a style={{ textDecoration: 'none', color: 'black' }}>
-                  My Profile
-                </a>
-              </Link>
-            </Menu.Item>
+            <Menu.Item onClick={() => push('profile')}>My Profile</Menu.Item>
             <Menu.Item onClick={() => signOut()}>Logout</Menu.Item>
           </Menu>
         ) : (

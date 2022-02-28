@@ -13,9 +13,13 @@ export default async function handler(
 
     switch (req.method) {
       case 'GET':
-        const { data } = await axios.get(
-          `${AIRTABLE_URL}/Hosts?api_key=${AIRTABLE_API_KEY}`
-        );
+        const { data } = await axios({
+          method: 'GET',
+          url: AIRTABLE_API_KEY,
+          headers: {
+            Authorization: `Bearer ${AIRTABLE_API_KEY}`,
+          },
+        });
         return res.status(200).json(data);
 
       case 'POST':

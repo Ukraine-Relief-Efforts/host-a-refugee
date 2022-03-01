@@ -18,7 +18,7 @@ export const Table = ({ data }: TableProps) => {
   const [focused, setFocused] = useState<Host>();
 
   const mapRows = data?.map((element) => (
-    <tr key={element.fields.name}>
+    <tr key={element.id}>
       <td>{element.fields.country}</td>
       <td>
         from <Code>{element.fields.dateStart || 'null'}</Code> to{' '}

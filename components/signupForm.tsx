@@ -108,9 +108,11 @@ export const SignupForm = () => {
           <Select
             {...form.getInputProps('city')}
             searchable
+            clearable
+            maxDropdownHeight={250}
             nothingFound="No options"
             label="City"
-            placeholder="Refugee / Host"
+            placeholder="City of ..."
             data={citiesOptions[
               form.values.country as keyof typeof citiesOptions
             ].map((city) => ({

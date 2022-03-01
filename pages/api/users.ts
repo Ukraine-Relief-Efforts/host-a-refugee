@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { AIRTABLE_API_KEY, AIRTABLE_URL } from '../../config';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { cities } from '../../citiesData';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
@@ -10,7 +11,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       userType,
       phoneNumber,
       email,
-      cityRegion,
+      city,
       accomodationDetails,
       groupSize,
       languages,
@@ -30,13 +31,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 userType,
                 phoneNumber,
                 email,
-                cityRegion,
+                city,
                 accomodationDetails,
                 groupSize,
                 languages,
                 dateStart,
                 dateEnd,
                 avatar,
+                ...cities[city as keyof typeof cities],
               },
             },
           ],

@@ -78,6 +78,7 @@ export const Nav = () => {
             </Anchor>
           ))}
         </Breadcrumbs>
+        <Space h="xl" />
       </div>
     </>
   );

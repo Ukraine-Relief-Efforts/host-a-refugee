@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { Space, Paper, Text } from '@mantine/core';
+import { Space, Paper, Text, Title } from '@mantine/core';
 import { UsersLookup, Layout } from '../components';
 import axios from 'axios';
 import { Host } from '../models';
@@ -20,8 +20,8 @@ export default function HomePage({ hosts, refugees }: HomeProps) {
       </Head>
 
       <Layout requireAuth={false}>
-        <Space h="xl" />
-        <Paper padding="lg" shadow="sm" radius="md" withBorder>
+        <Paper padding="xl" shadow="sm" radius="md" withBorder>
+          <Title order={3}>About us</Title>
           <Text>About us</Text>
         </Paper>
         <UsersLookup hosts={hosts} refugees={refugees} />
@@ -48,7 +48,7 @@ export async function getServerSideProps({ req, res }: any) {
   res.setHeader(
     'Cache-Control',
     'public, s-maxage=120, stale-while-revalidate=59'
-  )
+  );
 
   return {
     props: { refugees: refugees.records, hosts: hosts.records },

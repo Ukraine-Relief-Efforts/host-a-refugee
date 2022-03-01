@@ -1,5 +1,6 @@
 export { Nav } from './nav';
-export { HostSignup } from './hostSignup';
 export { Footer } from './footer';
-export { HostLookup } from './hostLookup';
+export { UsersLookup } from './usersLookup';
 export { Layout } from './layout';
+export { SignupForm } from './signupForm';
+export { Table } from './table';

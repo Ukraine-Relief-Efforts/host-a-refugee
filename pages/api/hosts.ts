@@ -14,7 +14,7 @@ export default async function handler(
       case 'GET':
         const { data: user } = await axios({
           method: 'GET',
-          url: `${AIRTABLE_URL}?maxRecords=1&filterByFormula=%28%7Bemail%7D%20%3D%20%27${session?.user?.email}%27%29`,
+          url: `${AIRTABLE_URL}/Hosts?maxRecords=1&filterByFormula=%28%7Bemail%7D%20%3D%20%27${session?.user?.email}%27%29`,
           headers: {
             Authorization: `Bearer ${AIRTABLE_API_KEY}`,
           },

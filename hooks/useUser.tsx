@@ -8,7 +8,7 @@ interface Data {
     phoneNumber: string;
     cityRegion: string;
     accomodationDetails: string;
-    hostCapacity: number;
+    groupSize: number;
     languages: string[];
   };
 }

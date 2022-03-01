@@ -5,7 +5,10 @@ export type Host = {
     userType: string;
     phoneNumber: string;
     email: string;
-    cityRegion: string;
+    country: string;
+    city: string;
+    lat: number;
+    lng: number;
     accomodationDetails?: string;
     groupSize: number;
     languages: string[];

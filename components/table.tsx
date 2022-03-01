@@ -18,8 +18,8 @@ export const Table = ({ data }: TableProps) => {
   const [focused, setFocused] = useState<Host>();
 
   const mapRows = data?.map((element) => (
-    <tr key={element.fields.name}>
-      <td>{element.fields.cityRegion}</td>
+    <tr key={element.id}>
+      <td>{element.fields.country}</td>
       <td>
         from <Code>{element.fields.dateStart || 'null'}</Code> to{' '}
         <Code>{element.fields.dateStart || 'null'}</Code>
@@ -54,7 +54,7 @@ export const Table = ({ data }: TableProps) => {
             alt="it's me"
           />
           <Text>
-            <b>Location:</b> {focused?.fields.cityRegion}
+            <b>Location:</b> {focused?.fields.country}
           </Text>
           <Text>
             <b>Name:</b> {focused?.fields.name}

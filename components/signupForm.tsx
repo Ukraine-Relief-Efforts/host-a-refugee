@@ -115,7 +115,11 @@ export const SignupForm = () => {
         opened={isSuccess}
         onClose={handleModalClose}
         title="Success!"
-        message={`Your registration was successful. We're working on matching you with a ${
+        message={`Your registration was successful${
+          userType === 'host'
+            ? ", we can't thank you enough for your support in these tough times 💗"
+            : '.'
+        } We're working on matching you with a ${
           userType === 'refugee' ? 'host' : 'refugee'
         } and will be in touch with you as soon as possible!`}
       />

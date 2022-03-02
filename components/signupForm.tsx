@@ -4,6 +4,7 @@ import axios from 'axios';
 import {
   Space,
   Paper,
+  Text,
   TextInput,
   Title,
   Button,
@@ -13,8 +14,9 @@ import {
   MultiSelect,
   Select,
   Group,
+  LoadingOverlay,
 } from '@mantine/core';
-import { MdPhone, MdMap } from 'react-icons/md';
+import { MdPhone } from 'react-icons/md';
 import { useSession } from 'next-auth/react';
 import { DateRangePicker } from '@mantine/dates';
 import { citiesOptions } from '../citiesOptions';
@@ -31,10 +33,14 @@ const languagesOptions = [
 
 export const SignupForm = () => {
   const { data: session } = useSession();
-  const [value, setValue] = useState<[Date | null, Date | null]>([
+  const [dates, setDates] = useState<[Date | null, Date | null]>([
     new Date(),
     new Date(),
   ]);
+
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
 
   const form = useForm({
     initialValues: {
@@ -48,33 +54,46 @@ export const SignupForm = () => {
       termsOfService: false,
     },
     validationRules: {
+      userType: (value) => !!value,
       phoneNumber: (value) => {
         var regEx = `^\\+?\\(?([0-9]{1,4})\\)?([-. ]?([0-9]{2}))?([-. ]?([0-9]{3}))([-. ]?([0-9]{2,3}))([-. ]?([0-9]{2,4}))$`;
         return value.match(regEx) !== null;
       },
     },
     errorMessages: {
+      userType: 'Please select your registration type',
       phoneNumber:
         'Please input a valid phone number and include the country code.',
     },
   });
 
-  const onSubmitHandler = (values: typeof form['values']) => {
-    console.log(values);
-    axios({
-      method: 'POST',
-      url: '/api/users',
-      data: {
-        ...values,
-        dateStart: value[0],
-        dateEnd: value[1],
-        name: session?.user?.name,
-        email: session?.user?.email,
-        avatar: session?.user?.image,
-      },
-    });
-    form.reset();
+  const onSubmitHandler = async (values: typeof form['values']) => {
+    setIsSubmitting(true);
+    setError('');
+
+    try {
+      await axios({
+        method: 'POST',
+        url: '/api/users',
+        data: {
+          ...values,
+          dateStart: dates[0],
+          dateEnd: dates[1],
+          name: session?.user?.name,
+          email: session?.user?.email,
+          avatar: session?.user?.image,
+        },
+      });
+      form.reset();
+      setIsSuccess(true);
+    } catch (error: any) {
+      console.error(error);
+      setError(error.message);
+    }
+
+    return setIsSubmitting(false);
   };
+
   return (
     <Paper padding="lg" shadow="sm" radius="md" withBorder>
       <Title order={3}>Register</Title>
@@ -82,6 +101,7 @@ export const SignupForm = () => {
 
       <form onSubmit={form.onSubmit(onSubmitHandler)}>
         <Group grow direction="column">
+          <LoadingOverlay visible={isSubmitting} />
           <Select
             {...form.getInputProps('userType')}
             label="Register type"
@@ -90,7 +110,6 @@ export const SignupForm = () => {
               { value: 'refugee', label: 'Refugee' },
               { value: 'host', label: 'Host' },
             ]}
-            required
           />
 
           <TextInput
@@ -134,8 +153,8 @@ export const SignupForm = () => {
           <DateRangePicker
             label="Accomodation dates"
             placeholder="Pick dates range"
-            value={value}
-            onChange={setValue}
+            value={dates}
+            onChange={setDates}
           />
 
           <Textarea
@@ -167,6 +186,12 @@ export const SignupForm = () => {
           <Button type="submit" color="teal">
             Submit
           </Button>
+
+          {error && (
+            <Text color="red" size="sm">
+              {error}
+            </Text>
+          )}
         </Group>
       </form>
     </Paper>

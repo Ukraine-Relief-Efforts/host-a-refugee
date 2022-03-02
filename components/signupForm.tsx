@@ -50,7 +50,7 @@ export const SignupForm = () => {
     validationRules: {
       phoneNumber: (value) => {
         var regEx = `^\\+?\\(?([0-9]{1,4})\\)?([-. ]?([0-9]{2}))?([-. ]?([0-9]{3}))([-. ]?([0-9]{2,3}))([-. ]?([0-9]{2,4}))$`;
-        return value.match(regEx) ? true : false;
+        return value.match(regEx) !== null;
       },
     },
     errorMessages: {

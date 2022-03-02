@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import { useForm } from '@mantine/hooks';
 import axios from 'axios';
 import {
@@ -20,6 +21,7 @@ import { MdPhone } from 'react-icons/md';
 import { useSession } from 'next-auth/react';
 import { DateRangePicker } from '@mantine/dates';
 import { citiesOptions } from '../citiesOptions';
+import { Modal } from '.';
 
 const languagesOptions = [
   { value: 'English', label: 'English' },
@@ -32,6 +34,7 @@ const languagesOptions = [
 ];
 
 export const SignupForm = () => {
+  const { push } = useRouter();
   const { data: session } = useSession();
   const [dates, setDates] = useState<[Date | null, Date | null]>([
     new Date(),
@@ -84,7 +87,6 @@ export const SignupForm = () => {
           avatar: session?.user?.image,
         },
       });
-      form.reset();
       setIsSuccess(true);
     } catch (error: any) {
       console.error(error);
@@ -94,10 +96,23 @@ export const SignupForm = () => {
     return setIsSubmitting(false);
   };
 
+  const handleModalClose = () => {
+    form.reset();
+    setIsSuccess(false);
+    return push('/');
+  };
+
   return (
     <Paper padding="lg" shadow="sm" radius="md" withBorder>
       <Title order={3}>Register</Title>
       <Space h="lg" />
+
+      <Modal
+        opened={isSuccess}
+        onClose={handleModalClose}
+        title="Success!"
+        message="You have successfully registered. We're working on finding you a ___ and will be in touch with you as soon as possible."
+      />
 
       <form onSubmit={form.onSubmit(onSubmitHandler)}>
         <Group grow direction="column">

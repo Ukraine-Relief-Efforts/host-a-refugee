@@ -47,6 +47,16 @@ export const SignupForm = () => {
       languages: '',
       termsOfService: false,
     },
+    validationRules: {
+      phoneNumber: (value) => {
+        var regEx = `^\\+?\\(?([0-9]{1,4})\\)?([-. ]?([0-9]{2}))?([-. ]?([0-9]{3}))([-. ]?([0-9]{2,3}))([-. ]?([0-9]{2,4}))$`;
+        return value.match(regEx) ? true : false;
+      },
+    },
+    errorMessages: {
+      phoneNumber:
+        'Please input a valid phone number and include the country code.',
+    },
   });
 
   const onSubmitHandler = (values: typeof form['values']) => {

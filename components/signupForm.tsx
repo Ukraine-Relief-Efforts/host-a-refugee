@@ -108,10 +108,10 @@ export const SignupForm = () => {
       <Space h="lg" />
 
       <Modal
-        opened={isSuccess}
+        opened={true}
         onClose={handleModalClose}
         title="Success!"
-        message="You have successfully registered. We're working on finding you a ___ and will be in touch with you as soon as possible."
+        message="You have successfully registered. We're working on finding you a ___ and will be in touch with you as soon as possible!"
       />
 
       <form onSubmit={form.onSubmit(onSubmitHandler)}>

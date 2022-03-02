@@ -62,13 +62,17 @@ export const SignupForm = () => {
         var regEx = `^\\+?\\(?([0-9]{1,4})\\)?([-. ]?([0-9]{2}))?([-. ]?([0-9]{3}))([-. ]?([0-9]{2,3}))([-. ]?([0-9]{2,4}))$`;
         return !!value || value.match(regEx) !== null;
       },
+      languages: (value) => !!value,
     },
     errorMessages: {
       userType: 'Please select your registration type',
       phoneNumber:
         'Please input a valid phone number and include the country code.',
+      languages: 'Please select at least one language',
     },
   });
+
+  const { userType } = form.values;
 
   const onSubmitHandler = async (values: typeof form['values']) => {
     setIsSubmitting(true);
@@ -108,10 +112,12 @@ export const SignupForm = () => {
       <Space h="lg" />
 
       <Modal
-        opened={true}
+        opened={isSuccess}
         onClose={handleModalClose}
         title="Success!"
-        message="You have successfully registered. We're working on finding you a ___ and will be in touch with you as soon as possible!"
+        message={`Your registration was successful. We're working on matching you with a ${
+          userType === 'refugee' ? 'host' : 'refugee'
+        } and will be in touch with you as soon as possible!`}
       />
 
       <form onSubmit={form.onSubmit(onSubmitHandler)}>
@@ -125,6 +131,7 @@ export const SignupForm = () => {
               { value: 'refugee', label: 'Refugee' },
               { value: 'host', label: 'Host' },
             ]}
+            required
           />
 
           <TextInput
@@ -132,11 +139,16 @@ export const SignupForm = () => {
             icon={<MdPhone />}
             placeholder="+03 123 456 789"
             label="Phone Number"
+            required
           />
 
           <Select
             {...form.getInputProps('country')}
-            label="Country"
+            label={
+              userType === 'refugee'
+                ? 'Destination country'
+                : 'Country of residence'
+            }
             placeholder="Refugee / Host"
             data={[
               { value: 'HU', label: 'Hungary' },
@@ -154,7 +166,9 @@ export const SignupForm = () => {
             clearable
             maxDropdownHeight={250}
             nothingFound="No options"
-            label="City"
+            label={
+              userType === 'refugee' ? 'Destination city' : 'City of residence'
+            }
             placeholder="City of ..."
             data={citiesOptions[
               form.values.country as keyof typeof citiesOptions
@@ -181,14 +195,20 @@ export const SignupForm = () => {
             defaultValue={2}
             {...form.getInputProps('groupSize')}
             placeholder="Number of people"
-            label="Number of people"
+            label={
+              userType === 'refugee'
+                ? 'Number of people in your group'
+                : 'Number of people you can accomodate'
+            }
             required
           />
+
           <MultiSelect
             {...form.getInputProps('languages')}
             data={languagesOptions}
             label="Spoken languages"
             placeholder="Pick the languages you can use"
+            required
           />
 
           <Checkbox

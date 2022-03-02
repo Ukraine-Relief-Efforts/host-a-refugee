@@ -57,7 +57,7 @@ export const SignupForm = () => {
       userType: (value) => !!value,
       phoneNumber: (value) => {
         var regEx = `^\\+?\\(?([0-9]{1,4})\\)?([-. ]?([0-9]{2}))?([-. ]?([0-9]{3}))([-. ]?([0-9]{2,3}))([-. ]?([0-9]{2,4}))$`;
-        return value.match(regEx) !== null;
+        return !!value || value.match(regEx) !== null;
       },
     },
     errorMessages: {
@@ -117,7 +117,6 @@ export const SignupForm = () => {
             icon={<MdPhone />}
             placeholder="+03 123 456 789"
             label="Phone Number"
-            required
           />
 
           <Select

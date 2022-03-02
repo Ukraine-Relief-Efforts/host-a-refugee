@@ -1,16 +1,12 @@
 import Head from 'next/head';
 import { Layout, SignupForm } from '../components';
-import { Space, Paper, Text, Title } from '@mantine/core';
+import { Space, Paper, Text, Title, LoadingOverlay } from '@mantine/core';
 import { useUser } from '../hooks';
 
 export default function ProfilePage() {
   const { data, loading, error } = useUser();
-  console.log(data);
 
   const renderUserInfo = () => {
-    if (loading) {
-      return <Text>Loading...</Text>;
-    }
     if (error) {
       return <Text color="red">Error: {error}</Text>;
     }
@@ -41,6 +37,7 @@ export default function ProfilePage() {
       <Layout>
         <Space h="xl" />
         <Paper padding="lg" shadow="sm" radius="md" withBorder>
+          <LoadingOverlay visible={loading} />
           <Title order={3}>My Profile</Title>
           <Space h="lg" />
 

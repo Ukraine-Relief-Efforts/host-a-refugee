@@ -4,3 +4,4 @@ export { UsersLookup } from './usersLookup';
 export { Layout } from './layout';
 export { SignupForm } from './signupForm';
 export { Table } from './table';
+export { Modal } from './modal';

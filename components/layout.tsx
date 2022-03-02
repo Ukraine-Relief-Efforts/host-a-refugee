@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Container, Modal, Title, Text, Space } from '@mantine/core';
-import { Nav, Footer } from './';
+import { Container, Title, Text, Space } from '@mantine/core';
+import { Nav, Footer, Modal } from './';
 import { useSession } from 'next-auth/react';
 
 interface LayoutProps {
@@ -26,12 +26,12 @@ export const Layout = ({ children, requireAuth = true }: LayoutProps) => {
   const renderContent = () => {
     if (requireAuth && !session) {
       return (
-        <Modal opened={opened} onClose={handleClose} size="md" radius="md">
-          <Title>Authentication required</Title>
-          <Space h="xl" />
-          <Text size="lg">Please login above ↗ to access this page.</Text>
-          <Space h="xl" />
-        </Modal>
+        <Modal
+          opened={opened}
+          onClose={handleClose}
+          title={'Authentication required'}
+          message={'Please sign in above ↗ to access this page.'}
+        />
       );
     }
 

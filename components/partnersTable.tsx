@@ -3,7 +3,7 @@ import { Partner } from '../models';
 
 type PartnerProps = { data: Partner[] };
 
-export default function PartnersTable({ data }: PartnerProps) {
+export const PartnersTable = ({ data }: PartnerProps) => {
   const partnerRows = data?.map((partner) => (
     <tr key={partner.name}>
       <td>{partner.name}</td>
@@ -36,4 +36,4 @@ export default function PartnersTable({ data }: PartnerProps) {
       </Table>
     </div>
   );
-}
+};

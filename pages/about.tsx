@@ -11,7 +11,9 @@ import {
   Center,
 } from '@mantine/core';
 import { partners } from '../data/partnersData';
-import PartnersTable from '../components/partnersTable';
+import { PartnersTable } from '../components';
+import { AiFillTwitterCircle as TwitterIcon } from 'react-icons/ai';
+import { AiFillGithub as GitHubIcon } from 'react-icons/ai';
 
 export default function about() {
   return (
@@ -28,16 +30,16 @@ export default function about() {
             <Grid.Col md={6} lg={8}>
               <Space h="md" />
               <Text size="lg" align="justify">
-                Host a refugee is incididunt fugiat sint sunt eiusmod fugiat ad
-                et est irure amet nostrud ad sunt. Pariatur do aute veniam
-                eiusmod aliqua tempor enim mollit aliquip. Irure duis excepteur
-                eu amet ad dolor duis consectetur est officia tempor minim
-                minim. Nisi aliquip veniam occaecat laborum ea culpa. Dolore
-                pariatur ullamco cillum id adipisicing ipsum laborum
-                adipisicing.
+                <span style={{ fontWeight: 700 }}>Host a refugee</span> is
+                incididunt fugiat sint sunt eiusmod fugiat ad et est irure amet
+                nostrud ad sunt. Pariatur do aute veniam eiusmod aliqua tempor
+                enim mollit aliquip. Irure duis excepteur eu amet ad dolor duis
+                consectetur est officia tempor minim minim. Nisi aliquip veniam
+                occaecat laborum ea culpa. Dolore pariatur ullamco cillum id
+                adipisicing ipsum laborum adipisicing.
               </Text>
               <Space h="md" />
-              <Text align="justify">
+              <Text size="lg" align="justify">
                 Adipisicing commodo elit consectetur excepteur sunt dolore qui
                 laborum exercitation. Elit excepteur anim incididunt adipisicing
                 amet esse proident non sint. Veniam nulla incididunt dolor
@@ -47,15 +49,12 @@ export default function about() {
                 magna.
               </Text>
               <Space h="md" />
-              <Text align="justify">
+              <Text align="justify" color="gray">
                 Irure tempor voluptate ex officia amet consectetur aliqua ea.
                 Veniam irure anim duis reprehenderit officia sunt esse velit. Ut
                 cupidatat eiusmod incididunt exercitation aliqua consequat velit
                 mollit Lorem quis cillum nulla cillum dolor. Excepteur ea minim
-                ex commodo dolor. Sint dolore ea ullamco esse dolor sint
-                proident dolore enim reprehenderit et non deserunt. Laboris qui
-                commodo ut cupidatat elit labore non id sit nulla aliqua magna
-                occaecat laborum.
+                ex commodo.
               </Text>
             </Grid.Col>
             <Grid.Col md={6} lg={4}>
@@ -90,6 +89,30 @@ export default function about() {
             that encompasses information for Ukrainian refugees, and impending
             others.
           </Text>
+          <Space h="md" />
+          <Center>
+            <Grid>
+              {/* https://www.schemecolor.com/ukraine-flag-colors.php */}
+              <Grid.Col span={6} gutter="xl">
+                <a
+                  href="https://twitter.com/TechFor_"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <TwitterIcon size={'3em'} color={'#005BBB'} />
+                </a>
+              </Grid.Col>
+              <Grid.Col span={6}>
+                <a
+                  href="https://github.com/Ukraine-Relief-Efforts"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <GitHubIcon size={'3em'} color={'#FFD500'} />
+                </a>
+              </Grid.Col>
+            </Grid>
+          </Center>
         </Paper>
         <Space h="md" />
         <Paper padding="xl" shadow="sm" radius="md" withBorder>

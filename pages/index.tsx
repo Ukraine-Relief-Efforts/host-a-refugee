@@ -1,6 +1,5 @@
 import Head from 'next/head';
-import { Space, Paper, Text, Title } from '@mantine/core';
-import { UsersLookup, Layout } from '../components';
+import { UsersLookup, Layout, AboutIndex } from '../components';
 import axios from 'axios';
 import { Host } from '../models';
 import { AIRTABLE_URL, AIRTABLE_API_KEY } from '../config';
@@ -20,10 +19,7 @@ export default function HomePage({ hosts, refugees }: HomeProps) {
       </Head>
 
       <Layout requireAuth={false}>
-        <Paper padding="xl" shadow="sm" radius="md" withBorder>
-          <Title order={3}>About us</Title>
-          <Text>About us</Text>
-        </Paper>
+        <AboutIndex />
         <UsersLookup hosts={hosts} refugees={refugees} />
       </Layout>
     </>

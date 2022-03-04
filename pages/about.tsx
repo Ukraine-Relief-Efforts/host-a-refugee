@@ -23,7 +23,7 @@ export default function about() {
         <meta name="" content="" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Layout>
+      <Layout requireAuth={false}>
         <Paper padding="xl" shadow="sm" radius="md" withBorder>
           <Title order={3}>About us</Title>
           <Grid gutter={20}>

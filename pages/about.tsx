@@ -1,4 +1,3 @@
-import React from 'react';
 import Head from 'next/head';
 import { Layout } from '../components';
 import {
@@ -11,6 +10,8 @@ import {
   Tooltip,
   Center,
 } from '@mantine/core';
+import { partners } from '../data/partnersData';
+import PartnersTable from '../components/partnersTable';
 
 export default function about() {
   return (
@@ -89,6 +90,12 @@ export default function about() {
             that encompasses information for Ukrainian refugees, and impending
             others.
           </Text>
+        </Paper>
+        <Space h="md" />
+        <Paper padding="xl" shadow="sm" radius="md" withBorder>
+          <Title order={3}>Our partners</Title>
+          <Space h="md" />
+          <PartnersTable data={partners} />
         </Paper>
       </Layout>
     </>

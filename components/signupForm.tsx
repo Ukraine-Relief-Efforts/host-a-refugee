@@ -20,7 +20,7 @@ import {
 import { MdPhone } from 'react-icons/md';
 import { useSession } from 'next-auth/react';
 import { DateRangePicker } from '@mantine/dates';
-import { citiesOptions } from '../citiesOptions';
+import { citiesOptions } from '../data/citiesOptions';
 import { Modal } from '.';
 
 const languagesOptions = [

@@ -16,6 +16,7 @@ import { useSession, signIn, signOut } from 'next-auth/react';
 const routes = [
   { title: 'Home', href: '/' },
   { title: 'Become a host', href: '/host-signup', protected: true },
+  { title: 'About us', href: '/about' },
 ];
 
 const authButtonStyle: {} = {

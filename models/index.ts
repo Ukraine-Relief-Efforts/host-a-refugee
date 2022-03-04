@@ -18,3 +18,10 @@ export type Host = {
   };
   createdTime: string;
 };
+
+export type Partner = {
+  name: string;
+  what: string;
+  operation: string;
+  donation?: string;
+};

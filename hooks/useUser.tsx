@@ -17,7 +17,7 @@ export function useUser() {
   const [data, setData] = useState<Data | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const isMounted = useRef(false);
+  const isMounted = useRef<boolean>(false);
 
   useEffect(() => {
     isMounted.current = true;

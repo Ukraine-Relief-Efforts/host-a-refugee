@@ -1,7 +1,8 @@
+import { useEffect } from 'react';
 import Head from 'next/head';
 import { Layout, SignupForm } from '../components';
 
-const HostSignupPage = () => {
+const RegisterPage = () => {
   return (
     <>
       <Head>
@@ -17,4 +18,4 @@ const HostSignupPage = () => {
   );
 };
 
-export default HostSignupPage;
+export default RegisterPage;

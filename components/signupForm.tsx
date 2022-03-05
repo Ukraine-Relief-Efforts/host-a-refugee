@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from '@mantine/hooks';
 import axios from 'axios';
@@ -18,7 +18,7 @@ import {
   LoadingOverlay,
 } from '@mantine/core';
 import { MdPhone } from 'react-icons/md';
-import { useSession } from 'next-auth/react';
+import { useSession, signIn } from 'next-auth/react';
 import { DateRangePicker } from '@mantine/dates';
 import { citiesOptions } from '../data/citiesOptions';
 import { Modal } from '.';
@@ -44,6 +44,14 @@ export const SignupForm = () => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
+
+  useEffect(() => {
+    (async () => {
+      if (!session) {
+        await signIn();
+      }
+    })();
+  }, [session]);
 
   const form = useForm({
     initialValues: {

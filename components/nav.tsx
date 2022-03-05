@@ -30,8 +30,8 @@ export const Nav = () => {
     { title: 'Home', href: '/' },
     { title: 'About us', href: '/about' },
     {
-      title: isAuthed ? 'Profile' : 'Register',
-      href: isAuthed ? 'profile' : '/register',
+      title: isAuthed ? 'Profile' : 'Sign in',
+      href: isAuthed ? '/profile' : '/register',
     },
   ];
 

@@ -5,19 +5,47 @@ import type { Session } from 'next-auth';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { filterByFormula } from '../../utils';
 
-export async function getUserInfo(session: Session | null): Promise<any> {
-  const { data } = await axios({
-    method: 'GET',
-    url: `${AIRTABLE_URL}/Hosts?maxRecords=1&${filterByFormula(
-      'email',
-      session!.user!.email!
-    )}`,
-    headers: {
-      Authorization: `Bearer ${AIRTABLE_API_KEY}`,
-    },
-  });
+export async function getAllUsers() {
+  try {
+    const { data: refugees } = await axios({
+      method: 'GET',
+      url: `${AIRTABLE_URL}/Hosts?${filterByFormula('userType', 'refugee')}`,
+      headers: { Authorization: `Bearer ${AIRTABLE_API_KEY}` },
+    });
 
-  return data.records[0];
+    const { data: hosts } = await axios({
+      method: 'GET',
+      url: `${AIRTABLE_URL}/Hosts?${filterByFormula('userType', 'host')}`,
+      headers: {
+        Authorization: `Bearer ${AIRTABLE_API_KEY}`,
+      },
+    });
+
+    return { hosts, refugees };
+  } catch (error: any) {
+    console.log(error);
+    throw new Error(error.message);
+  }
+}
+
+export async function getUserInfo(session: Session | null): Promise<any> {
+  try {
+    const { data } = await axios({
+      method: 'GET',
+      url: `${AIRTABLE_URL}/Hosts?maxRecords=1&${filterByFormula(
+        'email',
+        session!.user!.email!
+      )}`,
+      headers: {
+        Authorization: `Bearer ${AIRTABLE_API_KEY}`,
+      },
+    });
+
+    return data.records[0];
+  } catch (error: any) {
+    console.log(error);
+    throw new Error(error.message);
+  }
 }
 
 export default async function handler(
@@ -26,11 +54,23 @@ export default async function handler(
 ) {
   try {
     const session = await getSession({ req });
+    const {
+      query: { profile },
+    } = req;
 
     switch (req.method) {
       case 'GET':
-        const user = await getUserInfo(session);
-        return res.status(200).json({ user: user.records[0]?.fields });
+        if (!!profile) {
+          const user = await getUserInfo(session);
+          return res.status(200).json({ user: user.fields });
+        } else {
+          const { hosts, refugees } = await getAllUsers();
+          res.setHeader(
+            'Cache-Control',
+            'public, s-maxage=120, stale-while-revalidate=59'
+          );
+          return res.status(200).json({ hosts, refugees });
+        }
 
       case 'POST':
         const { termsOfService, ...rest } = req.body;

@@ -1,4 +1,4 @@
-export type Host = {
+export type User = {
   id: string;
   fields: {
     name: string;
@@ -6,7 +6,7 @@ export type Host = {
     phoneNumber: string;
     email: string;
     country: string;
-    city: string;
+    cityRegion: string;
     lat: number;
     lng: number;
     accomodationDetails?: string;

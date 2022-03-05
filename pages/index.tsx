@@ -1,12 +1,12 @@
 import Head from 'next/head';
 import { UsersLookup, Layout, AboutIndex } from '../components';
 import axios from 'axios';
-import { Host } from '../models';
+import { User } from '../models';
 import { AIRTABLE_URL, AIRTABLE_API_KEY } from '../config';
 import { filterByFormula } from '../utils';
 interface HomeProps {
-  hosts: Host[];
-  refugees: Host[];
+  hosts: User[];
+  refugees: User[];
 }
 
 export default function HomePage({ hosts, refugees }: HomeProps) {

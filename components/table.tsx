@@ -9,13 +9,13 @@ import {
   Avatar,
 } from '@mantine/core';
 import { MdOutlineHouse } from 'react-icons/md';
-import { Host } from '../models';
+import { User } from '../models';
 
-type TableProps = { data: Host[] };
+type TableProps = { data: User[] };
 
 export const Table = ({ data }: TableProps) => {
   const [opened, setOpened] = useState(false);
-  const [focused, setFocused] = useState<Host>();
+  const [focused, setFocused] = useState<User>();
 
   const mapRows = data?.map((element) => (
     <tr key={element.id}>

@@ -2,9 +2,9 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
 import 'leaflet-defaulticon-compatibility';
-import { Host } from '../models';
+import { User } from '../models';
 
-type MapProps = { pins: Host[] };
+type MapProps = { pins: User[] };
 
 const Map = ({ pins }: MapProps) => {
   return (

@@ -1,7 +1,7 @@
 import { Space, Paper, Title, Tabs } from '@mantine/core';
 import { MdPersonSearch, MdHouse } from 'react-icons/md';
 import { Table } from '.';
-import { Host } from '../models';
+import { User } from '../models';
 import dynamic from 'next/dynamic';
 
 const Map = dynamic(() => import('./map'), { ssr: false });
@@ -32,4 +32,4 @@ export const UsersLookup = ({ hosts, refugees }: HostLookupProps) => {
   );
 };
 
-type HostLookupProps = { hosts: Host[]; refugees: Host[] };
+type HostLookupProps = { hosts: User[]; refugees: User[] };

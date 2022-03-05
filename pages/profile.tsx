@@ -1,35 +1,16 @@
 import Head from 'next/head';
-import { Layout, SignupForm } from '../components';
-import { Space, Paper, Text, Title, LoadingOverlay } from '@mantine/core';
-import { useUser } from '../hooks';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/react';
+import { Layout } from '../components';
+import { Space, Paper, Text, Title } from '@mantine/core';
+import { getUserInfo } from './api/users';
+import type { User } from '../models';
 
-export default function ProfilePage() {
-  const { data, loading, error } = useUser();
-
-  const renderUserInfo = () => {
-    if (error) {
-      return <Text color="red">Error: {error}</Text>;
-    }
-
-    return data?.user?.email ? (
-      <>
-        <Text size="md">{`Email: ${data?.user?.email}`}</Text>
-        <Text size="md">{`Name: ${data?.user?.name}`}</Text>
-        <Text size="md">{`Phone Number: ${data?.user?.phoneNumber}`}</Text>
-        <Text size="md">{`City / Region: ${data?.user?.cityRegion}`}</Text>
-        <Text size="md">{`Accomodation Details: ${data?.user?.accomodationDetails}`}</Text>
-        <Text size="md">{`Host Capacity: ${data?.user?.groupSize}`}</Text>
-        <Text size="md">{`Spoken Languages ${data?.user?.languages}`}</Text>
-      </>
-    ) : (
-      <SignupForm />
-    );
-  };
-
+export default function ProfilePage({ user }: { user: User }) {
   return (
     <>
       <Head>
-        <title>Profile Page</title>
+        <title>Profile</title>
         <meta name="" content="" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -37,13 +18,44 @@ export default function ProfilePage() {
       <Layout>
         <Space h="xl" />
         <Paper padding="lg" shadow="sm" radius="md" withBorder>
-          <LoadingOverlay visible={loading} />
           <Title order={3}>My Profile</Title>
           <Space h="lg" />
-
-          {renderUserInfo()}
+          <Text size="md">{`Email: ${user.fields.email}`}</Text>
+          <Text size="md">{`Name: ${user.fields.name}`}</Text>
+          <Text size="md">{`Phone Number: ${user.fields.phoneNumber}`}</Text>
+          <Text size="md">{`City / Region: ${user.fields.cityRegion}`}</Text>
+          <Text size="md">{`Accomodation Details: ${user.fields.accomodationDetails}`}</Text>
+          <Text size="md">{`Host Capacity: ${user.fields.groupSize}`}</Text>
+          <Text size="md">{`Spoken Languages ${user.fields.languages}`}</Text>
         </Paper>
       </Layout>
     </>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = await getSession(ctx);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+
+  const user = await getUserInfo(session);
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/register',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: { user },
+  };
+};

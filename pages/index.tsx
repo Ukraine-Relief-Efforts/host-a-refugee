@@ -18,7 +18,7 @@ export default function HomePage({ hosts, refugees }: HomeProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Layout requireAuth={false}>
+      <Layout>
         <AboutIndex />
         <UsersLookup hosts={hosts} refugees={refugees} />
       </Layout>

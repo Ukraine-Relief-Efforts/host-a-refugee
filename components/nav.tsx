@@ -13,12 +13,6 @@ import {
 } from '@mantine/core';
 import { useSession, signIn, signOut } from 'next-auth/react';
 
-const routes = [
-  { title: 'Home', href: '/' },
-  { title: 'Become a host', href: '/host-signup', protected: true },
-  { title: 'About us', href: '/about' },
-];
-
 const authButtonStyle: {} = {
   position: 'absolute',
   display: 'flex',
@@ -30,6 +24,16 @@ const authButtonStyle: {} = {
 export const Nav = () => {
   const { push } = useRouter();
   const { data: session } = useSession();
+  const isAuthed = session && session.user;
+
+  const routes = [
+    { title: 'Home', href: '/' },
+    { title: 'About us', href: '/about' },
+    {
+      title: isAuthed ? 'Profile' : 'Register',
+      href: isAuthed ? 'profile' : '/register',
+    },
+  ];
 
   return (
     <>

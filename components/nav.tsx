@@ -1,6 +1,7 @@
+import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useSession, signIn, signOut, getProviders } from 'next-auth/react';
+import { useSession, signOut, getProviders } from 'next-auth/react';
 import {
   Menu,
   Button,
@@ -12,6 +13,7 @@ import {
   Anchor,
   Avatar,
 } from '@mantine/core';
+import { SignInModal } from './signInModal';
 
 const authButtonStyle: {} = {
   position: 'absolute',
@@ -24,6 +26,7 @@ const authButtonStyle: {} = {
 export const Nav = () => {
   const { push } = useRouter();
   const { data: session } = useSession();
+  const [opened, setOpened] = useState(false);
 
   const routes = [
     { title: 'Home', href: '/' },
@@ -32,6 +35,8 @@ export const Nav = () => {
 
   return (
     <>
+      <SignInModal opened={opened} onClose={() => setOpened(false)} />
+
       <Space h="xl" />
       <div
         style={{
@@ -70,7 +75,11 @@ export const Nav = () => {
             </Menu.Item>
           </Menu>
         ) : (
-          <Button sx={authButtonStyle} size="md" onClick={() => signIn()}>
+          <Button
+            sx={authButtonStyle}
+            size="md"
+            onClick={() => setOpened(true)}
+          >
             Sign In
           </Button>
         )}

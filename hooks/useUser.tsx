@@ -24,7 +24,7 @@ export function useUser() {
 
     const fetchUser = async () => {
       try {
-        const response = await axios.get('/api/hosts');
+        const response = await axios.get('/api/users');
         isMounted.current && setData(response.data);
       } catch (error: any) {
         console.error(error);

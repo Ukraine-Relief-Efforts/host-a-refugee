@@ -1,6 +1,6 @@
 import { ReactNode, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Container, Title, Text, Space } from '@mantine/core';
+import { Container } from '@mantine/core';
 import { Nav, Footer, Modal } from './';
 import { useSession } from 'next-auth/react';
 

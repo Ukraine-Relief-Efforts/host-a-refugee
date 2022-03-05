@@ -15,11 +15,11 @@ import { PartnersTable } from '../components';
 import { AiFillTwitterCircle as TwitterIcon } from 'react-icons/ai';
 import { AiFillGithub as GitHubIcon } from 'react-icons/ai';
 
-export default function about() {
+export default function AboutPage() {
   return (
     <>
       <Head>
-        <title>About Host a refugee</title>
+        <title>About Host a Refugee</title>
         <meta name="" content="" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

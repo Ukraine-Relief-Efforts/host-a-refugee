@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useSession, signIn, signOut, getProviders } from 'next-auth/react';
 import {
   Menu,
   Button,
@@ -11,7 +12,6 @@ import {
   Anchor,
   Avatar,
 } from '@mantine/core';
-import { useSession, signIn, signOut } from 'next-auth/react';
 
 const authButtonStyle: {} = {
   position: 'absolute',
@@ -24,15 +24,10 @@ const authButtonStyle: {} = {
 export const Nav = () => {
   const { push } = useRouter();
   const { data: session } = useSession();
-  const isAuthed = session && session.user;
 
   const routes = [
     { title: 'Home', href: '/' },
     { title: 'About us', href: '/about' },
-    {
-      title: isAuthed ? 'Profile' : 'Sign in',
-      href: isAuthed ? '/profile' : '/register',
-    },
   ];
 
   return (
@@ -64,7 +59,15 @@ export const Nav = () => {
             }
           >
             <Menu.Item onClick={() => push('profile')}>My Profile</Menu.Item>
-            <Menu.Item onClick={() => signOut()}>Logout</Menu.Item>
+            <Menu.Item
+              onClick={() =>
+                signOut({
+                  callbackUrl: '/',
+                })
+              }
+            >
+              Logout
+            </Menu.Item>
           </Menu>
         ) : (
           <Button sx={authButtonStyle} size="md" onClick={() => signIn()}>

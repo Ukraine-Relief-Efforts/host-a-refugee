@@ -96,6 +96,26 @@ export default async function handler(
         });
         return res.status(200).json({ created });
 
+      case 'PUT':
+        for (const key in req.body) {
+          if (!allowedUpdates.includes(key)) throw new Error('Invalid update!');
+        }
+
+        const { data: updated } = await axios({
+          method: 'PUT',
+          url: `${AIRTABLE_URL}/Hosts`,
+          data: {
+            records: [
+              {
+                fields: req.body,
+              },
+            ],
+            typecast: true,
+          },
+          headers: { Authorization: `Bearer ${AIRTABLE_API_KEY}` },
+        });
+        return res.status(200).json({ updated });
+
       default:
         res.status(404).json({ info: 'method not implemented' });
     }
@@ -104,3 +124,16 @@ export default async function handler(
     res.status(500).json({ error: error.message });
   }
 }
+
+const allowedUpdates = [
+  'name',
+  'userType',
+  'phoneNumber',
+  'country',
+  'city',
+  'accomodationDetails',
+  'groupSize',
+  'languages',
+  'dateStart',
+  'dateEnd',
+];

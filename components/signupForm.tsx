@@ -93,8 +93,8 @@ export const SignupForm = () => {
       });
       setIsSuccess(true);
     } catch (error: any) {
-      console.error(error);
-      setError(error.message);
+      console.error(error.response);
+      setError(error.response?.data?.error || error.message);
     }
 
     return setIsSubmitting(false);

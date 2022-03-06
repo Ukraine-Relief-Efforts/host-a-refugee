@@ -73,6 +73,13 @@ export default async function handler(
         }
 
       case 'POST':
+        const user = await getUserInfo(session);
+        if (!!user) {
+          return res.status(400).json({
+            error: 'User profile with this email already exists!',
+          });
+        }
+
         const { termsOfService, ...rest } = req.body;
         const { data: created } = await axios({
           method: 'POST',

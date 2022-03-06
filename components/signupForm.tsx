@@ -176,8 +176,8 @@ export const SignupForm = () => {
             placeholder="City of ..."
             data={citiesOptions[
               form.values.country as keyof typeof citiesOptions
-            ].map((city) => ({
-              value: city,
+            ].map((city, index) => ({
+              value: `${city}-${index}`,
               label: city,
             }))}
           />

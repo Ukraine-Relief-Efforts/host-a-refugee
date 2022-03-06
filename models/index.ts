@@ -15,6 +15,7 @@ export type Host = {
     dateStart?: string;
     dateEnd?: string;
     avatar?: string;
+    verified?: boolean;
   };
   createdTime: string;
 };

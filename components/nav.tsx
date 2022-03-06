@@ -31,6 +31,8 @@ export const Nav = () => {
   const { push } = useRouter();
   const { data: session } = useSession();
 
+
+
   return (
     <>
       <Space h="xl" />
@@ -70,7 +72,7 @@ export const Nav = () => {
         <Space h="lg" />
         <Breadcrumbs separator="|">
           {routes.map((item, index) => (
-            <Anchor key={`${index}-${item}`}>
+            <Anchor key={`${index}-${item}`} hidden={(item.href == "/host-signup" && session != null ? true : false)}>
               <Link href={item.href} passHref>
                 <Text color="blue" size="md">
                   {item.title}

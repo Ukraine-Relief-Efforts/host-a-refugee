@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useSession, signOut, getProviders } from 'next-auth/react';
 import {
   Menu,
   Button,
@@ -11,13 +13,7 @@ import {
   Anchor,
   Avatar,
 } from '@mantine/core';
-import { useSession, signIn, signOut } from 'next-auth/react';
-
-const routes = [
-  { title: 'Home', href: '/' },
-  { title: 'Become a host', href: '/host-signup', protected: true },
-  { title: 'About us', href: '/about' },
-];
+import { SignInModal } from './signInModal';
 
 const authButtonStyle: {} = {
   position: 'absolute',
@@ -30,9 +26,17 @@ const authButtonStyle: {} = {
 export const Nav = () => {
   const { push } = useRouter();
   const { data: session } = useSession();
+  const [opened, setOpened] = useState(false);
+
+  const routes = [
+    { title: 'Home', href: '/' },
+    { title: 'About us', href: '/about' },
+  ];
 
   return (
     <>
+      <SignInModal opened={opened} onClose={() => setOpened(false)} />
+
       <Space h="xl" />
       <div
         style={{
@@ -60,10 +64,22 @@ export const Nav = () => {
             }
           >
             <Menu.Item onClick={() => push('profile')}>My Profile</Menu.Item>
-            <Menu.Item onClick={() => signOut()}>Logout</Menu.Item>
+            <Menu.Item
+              onClick={() =>
+                signOut({
+                  callbackUrl: '/',
+                })
+              }
+            >
+              Logout
+            </Menu.Item>
           </Menu>
         ) : (
-          <Button sx={authButtonStyle} size="md" onClick={() => signIn()}>
+          <Button
+            sx={authButtonStyle}
+            size="md"
+            onClick={() => setOpened(true)}
+          >
             Sign In
           </Button>
         )}

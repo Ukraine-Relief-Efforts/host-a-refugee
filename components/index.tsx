@@ -7,3 +7,4 @@ export { Table } from './table';
 export { Modal } from './modal';
 export { AboutIndex } from './aboutIndex';
 export { PartnersTable } from './partnersTable';
+export { SignInModal } from './signInModal';

@@ -1,4 +1,4 @@
-export type Host = {
+export type User = {
   id: string;
   fields: {
     name: string;

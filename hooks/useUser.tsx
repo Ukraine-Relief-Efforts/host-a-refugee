@@ -1,16 +1,8 @@
 import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
-
+import { Host } from '../models';
 interface Data {
-  user: {
-    email: string;
-    name: string;
-    phoneNumber: string;
-    cityRegion: string;
-    accomodationDetails: string;
-    groupSize: number;
-    languages: string[];
-  };
+  user: Host['fields'];
 }
 
 export function useUser() {

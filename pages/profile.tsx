@@ -1,17 +1,13 @@
-import { Fragment } from 'react';
 import Head from 'next/head';
-import Image from 'next/image';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/react';
-import _ from 'lodash';
-import { Space, Paper, Text, Title } from '@mantine/core';
-import { getUserInfo } from './api/users';
+import { Space, Paper, Text, Title, Group, Badge, Center } from '@mantine/core';
+import { AiOutlineCheck, AiOutlineClose } from 'react-icons/ai';
 import { Layout } from '../components';
-import type { User } from '../models';
+import { getUserInfo } from './api/users';
+import { User } from '../models';
 
 export default function ProfilePage({ user }: { user: User }) {
-  const { avatar, ...rest } = user.fields;
-
   return (
     <>
       <Head>
@@ -23,36 +19,59 @@ export default function ProfilePage({ user }: { user: User }) {
       <Layout size="xs">
         <Space h="xl" />
         <Paper padding="lg" shadow="sm" radius="md" withBorder>
-          <Title order={3}>My Profile</Title>
-
-          <Space h="lg" />
-
-          {avatar && (
-            <div
-              style={{
-                height: 100,
-                width: 100,
-                borderRadius: 50,
-                overflow: 'hidden',
-              }}
-            >
-              <Image src={avatar} width={100} height={100} alt="avatar" />
-            </div>
-          )}
-
-          <Space h="lg" />
-
-          {Object.entries(rest).map(([key, value]) => (
-            <Fragment key={key}>
-              <Text weight={700}>{_.startCase(key)}</Text>
-              <hr style={{ margin: 0 }} />
-              <Text>
-                {typeof value === 'object' ? value.join(', ') : value}
-              </Text>
-
-              <Space h="md" />
-            </Fragment>
-          ))}
+          <Group direction="column">
+            <Group>
+              <Title order={3}>My Profile</Title>
+              {user.fields.verified ? (
+                <Badge variant="filled" color="green">
+                  <Group spacing="xs">
+                    <AiOutlineCheck />
+                    <p>Verified</p>
+                  </Group>
+                </Badge>
+              ) : (
+                <Badge variant="filled" color="red">
+                  <Group spacing="xs">
+                    <AiOutlineClose />
+                    <p>Unverified</p>
+                  </Group>
+                </Badge>
+              )}
+            </Group>
+            <Space />
+            <Group direction="column">
+              <Group>
+                <Text weight="bold">Email:</Text>
+                <Text color="dimmed">{user.fields.email}</Text>
+              </Group>
+              <Group>
+                <Text weight="bold">Name:</Text>
+                <Text color="dimmed">{user.fields.name}</Text>
+              </Group>
+              <Group>
+                <Text weight="bold">Phone Number:</Text>
+                <Text color="dimmed">{user.fields.phoneNumber}</Text>
+              </Group>
+              <Group>
+                <Text weight="bold">City / region:</Text>
+                <Text color="dimmed">
+                  {user.fields.city}, {user.fields.country}
+                </Text>
+              </Group>
+              <Group>
+                <Text weight="bold">Accomodation Details:</Text>
+                <Text color="dimmed">{user.fields.accomodationDetails}</Text>
+              </Group>
+              <Group>
+                <Text weight="bold">Group size:</Text>
+                <Text color="dimmed">{user.fields.groupSize}</Text>
+              </Group>
+              <Group>
+                <Text weight="bold">Languages:</Text>
+                <Text color="dimmed">{user.fields.languages.join(', ')}</Text>
+              </Group>
+            </Group>
+          </Group>
         </Paper>
       </Layout>
     </>

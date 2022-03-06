@@ -6,7 +6,7 @@ export type User = {
     phoneNumber: string;
     email: string;
     country: string;
-    cityRegion: string;
+    city: string;
     lat: number;
     lng: number;
     accomodationDetails?: string;
@@ -15,6 +15,7 @@ export type User = {
     dateStart?: string;
     dateEnd?: string;
     avatar?: string;
+    verified?: boolean;
   };
   createdTime: string;
 };

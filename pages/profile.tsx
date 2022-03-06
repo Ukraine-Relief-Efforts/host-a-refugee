@@ -15,7 +15,7 @@ export default function ProfilePage({ user }: { user: User }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Layout>
+      <Layout size="xs">
         <Space h="xl" />
         <Paper padding="lg" shadow="sm" radius="md" withBorder>
           <Title order={3}>My Profile</Title>

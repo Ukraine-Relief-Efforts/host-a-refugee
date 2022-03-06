@@ -12,7 +12,12 @@ const Map = ({ pins }: MapProps) => {
       center={[48.68, 21.76]}
       zoom={6}
       scrollWheelZoom={false}
-      style={{ height: 400, width: '100%' }}
+      style={{
+        height: 400,
+        width: '100%',
+        zIndex: '0',
+        borderRadius: '0rem 0rem 0.5rem 0.5rem',
+      }}
     >
       <TileLayer
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'

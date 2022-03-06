@@ -1,12 +1,17 @@
+import { Fragment } from 'react';
 import Head from 'next/head';
+import Image from 'next/image';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/react';
-import { Layout } from '../components';
+import _ from 'lodash';
 import { Space, Paper, Text, Title } from '@mantine/core';
 import { getUserInfo } from './api/users';
+import { Layout } from '../components';
 import type { User } from '../models';
 
 export default function ProfilePage({ user }: { user: User }) {
+  const { avatar, ...rest } = user.fields;
+
   return (
     <>
       <Head>
@@ -19,14 +24,35 @@ export default function ProfilePage({ user }: { user: User }) {
         <Space h="xl" />
         <Paper padding="lg" shadow="sm" radius="md" withBorder>
           <Title order={3}>My Profile</Title>
+
           <Space h="lg" />
-          <Text size="md">{`Email: ${user.fields.email}`}</Text>
-          <Text size="md">{`Name: ${user.fields.name}`}</Text>
-          <Text size="md">{`Phone Number: ${user.fields.phoneNumber}`}</Text>
-          <Text size="md">{`City / Region: ${user.fields.cityRegion}`}</Text>
-          <Text size="md">{`Accomodation Details: ${user.fields.accomodationDetails}`}</Text>
-          <Text size="md">{`Host Capacity: ${user.fields.groupSize}`}</Text>
-          <Text size="md">{`Spoken Languages ${user.fields.languages}`}</Text>
+
+          {avatar && (
+            <div
+              style={{
+                height: 100,
+                width: 100,
+                borderRadius: 50,
+                overflow: 'hidden',
+              }}
+            >
+              <Image src={avatar} width={100} height={100} alt="avatar" />
+            </div>
+          )}
+
+          <Space h="lg" />
+
+          {Object.entries(rest).map(([key, value]) => (
+            <Fragment key={key}>
+              <Text weight={700}>{_.startCase(key)}</Text>
+              <hr style={{ margin: 0 }} />
+              <Text>
+                {typeof value === 'object' ? value.join(', ') : value}
+              </Text>
+
+              <Space h="md" />
+            </Fragment>
+          ))}
         </Paper>
       </Layout>
     </>

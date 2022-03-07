@@ -26,3 +26,5 @@ export type Partner = {
   operation: string;
   donation?: string;
 };
+
+export type languageOptions = 'eng' | 'ua' | 'pl' | 'ro' | 'sk' | 'de' | 'hu';

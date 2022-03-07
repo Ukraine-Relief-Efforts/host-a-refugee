@@ -94,7 +94,7 @@ export const SignupForm = () => {
       setIsSuccess(true);
     } catch (error: any) {
       console.error(error);
-      setError(error.message);
+      setError(error?.response?.data?.error || error.message);
     }
 
     return setIsSubmitting(false);

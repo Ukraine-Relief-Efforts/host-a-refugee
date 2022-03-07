@@ -1,7 +1,5 @@
-import { useState } from 'react';
-import Link from 'next/link';
+import { useState, useContext } from 'react';
 import { useRouter } from 'next/router';
-import { useSession, signOut, getProviders } from 'next-auth/react';
 import {
   Menu,
   Button,
@@ -12,8 +10,21 @@ import {
   Breadcrumbs,
   Anchor,
   Avatar,
+  MediaQuery,
+  Group,
+  Select,
 } from '@mantine/core';
-import { SignInModal } from './signInModal';
+import { useSession, signOut } from 'next-auth/react';
+import { SignInModal } from '../signInModal';
+import { LanguageContext } from '../../context';
+import { labels } from './content';
+
+type languageOptions = 'eng' | 'ua' | 'pl' | 'ro' | 'sk' | 'de' | 'hu';
+
+const routes = (lang: languageOptions) => [
+  { title: labels.menuHome[lang], href: '/' },
+  { title: labels.menuAbout[lang], href: '/about' },
+];
 
 const authButtonStyle: {} = {
   position: 'absolute',
@@ -27,31 +38,22 @@ export const Nav = () => {
   const { push } = useRouter();
   const { data: session } = useSession();
   const [opened, setOpened] = useState(false);
-
-  const routes = [
-    { title: 'Home', href: '/' },
-    { title: 'About us', href: '/about' },
-  ];
+  const { language, setLanguage }: any = useContext(LanguageContext);
 
   return (
     <>
       <SignInModal opened={opened} onClose={() => setOpened(false)} />
 
       <Space h="xl" />
-      <div
-        style={{
-          position: 'relative',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          width: '100%',
-        }}
-      >
-        <Center>
+      <Group>
+        <MediaQuery smallerThan={'md'} styles={{ fontSize: '1.2rem' }}>
           <Title order={1}>🇺🇦 Host a Refugee</Title>
-        </Center>
+        </MediaQuery>
+
         {session && session.user ? (
           <Menu
+            trigger="hover"
+            style={{ padding: '1rem' }}
             sx={authButtonStyle}
             placement="end"
             control={
@@ -83,20 +85,39 @@ export const Nav = () => {
             Sign In
           </Button>
         )}
-        <Space h="lg" />
+      </Group>
+      <Space h="lg" />
+      <Center>
         <Breadcrumbs separator="|">
-          {routes.map((item, index) => (
-            <Anchor key={`${index}-${item}`}>
-              <Link href={item.href} passHref>
+          {routes(language).map((item, index) => (
+            <Anchor key={`${index}-${item}`} href={item.href}>
+              <MediaQuery smallerThan={'md'} styles={{ fontSize: '0.9rem' }}>
                 <Text color="blue" size="md">
                   {item.title}
                 </Text>
-              </Link>
+              </MediaQuery>
             </Anchor>
           ))}
         </Breadcrumbs>
-        <Space h="xl" />
-      </div>
+        <Space h="md" />
+        <Select
+          size="xs"
+          title="Language"
+          style={{ width: 100, paddingLeft: '1rem' }}
+          placeholder="Website Language"
+          onChange={setLanguage}
+          value={language}
+          data={[
+            { value: 'eng', label: '🏴󠁧󠁢󠁥󠁮󠁧󠁿 Eng' },
+            { value: 'ua', label: '🇺🇦 Ua' },
+            { value: 'ro', label: '🇷🇴 Ro' },
+            { value: 'de', label: '🇩🇪 De' },
+            { value: 'sk', label: '🇸🇰 Sk' },
+            { value: 'pl', label: '🇵🇱 Pl' },
+          ]}
+        />
+      </Center>
+      <Space h="xl" />
     </>
   );
 };

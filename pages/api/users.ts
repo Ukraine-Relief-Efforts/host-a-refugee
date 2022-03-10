@@ -102,20 +102,21 @@ export default async function handler(
             ],
             typecast: true,
           },
-          headers: { Authorization: `Bearer ${AIRTABLE_API_KEY}` },
+          headers: {
+            Authorization: `Bearer ${AIRTABLE_API_KEY}`,
+            'Content-Type': 'application/json',
+          },
         });
         return res.status(200).json({ created });
 
       case 'PATCH':
-        const { id } = await getUserInfo(session);
-
         const { data: updated } = await axios({
           method: 'PATCH',
           url: `${AIRTABLE_URL}/Hosts`,
           data: {
             records: [
               {
-                id,
+                id: await getUserInfo(session).then((user) => user.id),
                 fields: {
                   name: req.body.name,
                   email: req.body.email,
@@ -139,6 +140,26 @@ export default async function handler(
         });
         return res.status(200).json({ updated });
 
+      case 'DELETE':
+        const { data: deleted } = await axios({
+          method: 'DELETE',
+          url: `${AIRTABLE_URL}/Hosts`,
+          data: {
+            records: [
+              {
+                id: await getUserInfo(session).then((user) => user.id),
+                deleted: true,
+              },
+            ],
+            typecast: true,
+          },
+          headers: {
+            Authorization: `Bearer ${AIRTABLE_API_KEY}`,
+            'Content-Type': 'application/json',
+          },
+        });
+        return res.status(200).json({ deleted });
+
       default:
         res.status(404).json({ info: 'method not implemented' });
     }
@@ -147,17 +168,3 @@ export default async function handler(
     res.status(500).json({ error: error.message });
   }
 }
-
-const allowedUpdates = [
-  'name',
-  'email',
-  'userType',
-  'phoneNumber',
-  'country',
-  'city',
-  'accomodationDetails',
-  'groupSize',
-  'languages',
-  'dateStart',
-  'dateEnd',
-];

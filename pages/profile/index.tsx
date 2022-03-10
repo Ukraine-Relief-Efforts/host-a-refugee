@@ -20,8 +20,8 @@ export default function ProfilePage({ user }: { user: User }) {
       <Layout size="xs">
         <Space h="xl" />
         <Paper padding="lg" shadow="sm" radius="md" withBorder>
-          <Group direction="column">
-            <Group>
+          <Group direction="column" grow>
+            <Group style={{ position: 'relative' }}>
               <Title order={3}>My Profile</Title>
               {user.fields.verified ? (
                 <Badge variant="filled" color="green">
@@ -38,11 +38,13 @@ export default function ProfilePage({ user }: { user: User }) {
                   </Group>
                 </Badge>
               )}
-              <Link href="/profile/edit" passHref>
-                <a>
-                  <Button>Edit</Button>
-                </a>
-              </Link>
+              <div style={{ position: 'absolute', right: 0 }}>
+                <Link href="/profile/edit" passHref>
+                  <a>
+                    <Button>Edit</Button>
+                  </a>
+                </Link>
+              </div>
             </Group>
             <Space />
             <Group direction="column">

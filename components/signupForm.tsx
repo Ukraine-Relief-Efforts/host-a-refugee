@@ -23,6 +23,8 @@ import { DateRangePicker } from '@mantine/dates';
 import { citiesOptions } from '../data/citiesOptions';
 import { Modal } from '.';
 
+import { getForwardGeocodingInfo } from '../pages/api/location';
+
 const languagesOptions = [
   { value: 'English', label: 'English' },
   { value: 'Ukrainian', label: 'Ukrainian' },
@@ -55,6 +57,8 @@ export const SignupForm = () => {
       groupSize: 1,
       languages: '',
       termsOfService: false,
+      lat: '',
+      lng: '',
     },
     validationRules: {
       userType: (value) => !!value,
@@ -74,22 +78,45 @@ export const SignupForm = () => {
 
   const { userType } = form.values;
 
+  const retrieveLatLng = async (
+    city: string,
+    country: string
+  ): Promise<any> => {
+    try {
+      const { latitude, longitude } = await getForwardGeocodingInfo(
+        city || country
+      );
+      return [latitude, longitude];
+    } catch (error: any) {
+      console.error(error);
+    }
+  };
+
   const onSubmitHandler = async (values: typeof form['values']) => {
     setIsSubmitting(true);
     setError('');
+
+    const [lat, lng] = await retrieveLatLng(values.city, values.country);
+
+    const data = {
+      ...values,
+      dateStart: dates[0],
+      dateEnd: dates[1],
+      name: session?.user?.name,
+      email: session?.user?.email,
+      avatar: session?.user?.image,
+    };
+
+    if (lat && lng) {
+      data.lat = lat;
+      data.lng = lng;
+    }
 
     try {
       await axios({
         method: 'POST',
         url: '/api/users',
-        data: {
-          ...values,
-          dateStart: dates[0],
-          dateEnd: dates[1],
-          name: session?.user?.name,
-          email: session?.user?.email,
-          avatar: session?.user?.image,
-        },
+        data,
       });
       setIsSuccess(true);
     } catch (error: any) {

@@ -1,13 +1,11 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { useForm } from '@mantine/hooks';
 import axios from 'axios';
+import { useForm } from '@mantine/hooks';
+import { useSession } from 'next-auth/react';
 import {
-  Space,
-  Paper,
   Text,
   TextInput,
-  Title,
   Button,
   Textarea,
   NumberInput,
@@ -17,11 +15,10 @@ import {
   Group,
   LoadingOverlay,
 } from '@mantine/core';
+import { Modal } from '.';
 import { MdPhone } from 'react-icons/md';
-import { useSession } from 'next-auth/react';
 import { DateRangePicker } from '@mantine/dates';
 import { citiesOptions } from '../data/citiesOptions';
-import { Modal } from '.';
 
 const languagesOptions = [
   { value: 'English', label: 'English' },
@@ -33,33 +30,39 @@ const languagesOptions = [
   { value: 'Hungarian', label: 'Hungarian' },
 ];
 
-export const SignupForm = () => {
+interface SignupFormProps {
+  initialValues: {
+    userType: string;
+    phoneNumber: string;
+    country: string;
+    city: string;
+    accomodationDetails: string;
+    groupSize: number;
+    languages: string;
+    termsOfService: boolean;
+  };
+  method: 'POST' | 'PUT';
+  url: string;
+}
+
+export const SignupForm = ({ initialValues, method, url }: SignupFormProps) => {
   const { push } = useRouter();
   const { data: session } = useSession();
+
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
   const [dates, setDates] = useState<[Date | null, Date | null]>([
     new Date(),
     new Date(),
   ]);
 
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [isSuccess, setIsSuccess] = useState<boolean>(false);
-  const [error, setError] = useState<string>('');
-
   const form = useForm({
-    initialValues: {
-      userType: '',
-      phoneNumber: '',
-      country: 'PL',
-      city: '',
-      accomodationDetails: '',
-      groupSize: 1,
-      languages: '',
-      termsOfService: false,
-    },
+    initialValues,
     validationRules: {
       userType: (value) => !!value,
       phoneNumber: (value) => {
-        var regEx = `^\\+?\\(?([0-9]{1,4})\\)?([-. ]?([0-9]{2}))?([-. ]?([0-9]{3}))([-. ]?([0-9]{2,3}))([-. ]?([0-9]{2,4}))$`;
+        const regEx = `^\\+?\\(?([0-9]{1,4})\\)?([-. ]?([0-9]{2}))?([-. ]?([0-9]{3}))([-. ]?([0-9]{2,3}))([-. ]?([0-9]{2,4}))$`;
         return !!value || value.match(regEx) !== null;
       },
       languages: (value) => !!value,
@@ -73,6 +76,16 @@ export const SignupForm = () => {
   });
 
   const { userType } = form.values;
+  const successMessage =
+    method === 'POST'
+      ? `Your registration was successful${
+          userType === 'host'
+            ? ", we can't thank you enough for your support in these tough times 💗"
+            : '.'
+        } We're working on matching you with a ${
+          userType === 'refugee' ? 'host' : 'refugee'
+        } and will be in touch with you as soon as possible!`
+      : 'Your profile was successfully updated!';
 
   const onSubmitHandler = async (values: typeof form['values']) => {
     setIsSubmitting(true);
@@ -80,8 +93,8 @@ export const SignupForm = () => {
 
     try {
       await axios({
-        method: 'POST',
-        url: '/api/users',
+        method,
+        url,
         data: {
           ...values,
           dateStart: dates[0],
@@ -101,27 +114,17 @@ export const SignupForm = () => {
   };
 
   const handleModalClose = () => {
-    form.reset();
     setIsSuccess(false);
     return push('/');
   };
 
   return (
-    <Paper padding="lg" shadow="sm" radius="md" withBorder>
-      <Title order={3}>Register</Title>
-      <Space h="lg" />
-
+    <>
       <Modal
         opened={isSuccess}
         onClose={handleModalClose}
         title="Success!"
-        message={`Your registration was successful${
-          userType === 'host'
-            ? ", we can't thank you enough for your support in these tough times 💗"
-            : '.'
-        } We're working on matching you with a ${
-          userType === 'refugee' ? 'host' : 'refugee'
-        } and will be in touch with you as soon as possible!`}
+        message={successMessage}
       />
 
       <form onSubmit={form.onSubmit(onSubmitHandler)}>
@@ -232,6 +235,6 @@ export const SignupForm = () => {
           )}
         </Group>
       </form>
-    </Paper>
+    </>
   );
 };

@@ -62,7 +62,7 @@ export default async function handler(
       case 'GET':
         if (!!profile) {
           const user = await getUserInfo(session);
-          return res.status(200).json({ user: user.fields });
+          return res.status(200).json({ user });
         } else {
           const { hosts, refugees } = await getAllUsers();
           res.setHeader(
@@ -115,6 +115,11 @@ export default async function handler(
           headers: { Authorization: `Bearer ${AIRTABLE_API_KEY}` },
         });
         return res.status(200).json({ updated });
+
+      // case 'DELETE':
+      //   const { data: deleted } = await axios({
+      //     method: 'DELETE',
+      //     url: `${AIRTABLE_URL}/Hosts/`,
 
       default:
         res.status(404).json({ info: 'method not implemented' });

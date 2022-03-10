@@ -3,9 +3,9 @@ import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/react';
 import { Space, Paper, Text, Title, Group, Badge, Center } from '@mantine/core';
 import { AiOutlineCheck, AiOutlineClose } from 'react-icons/ai';
-import { Layout } from '../components';
-import { getUserInfo } from './api/users';
-import { User } from '../models';
+import { Layout } from '../../components';
+import { getUserInfo } from '../api/users';
+import { User } from '../../models';
 
 export default function ProfilePage({ user }: { user: User }) {
   return (

@@ -141,24 +141,19 @@ export default async function handler(
         return res.status(200).json({ updated });
 
       case 'DELETE':
-        const { data: deleted } = await axios({
+        await axios({
           method: 'DELETE',
-          url: `${AIRTABLE_URL}/Hosts`,
-          data: {
-            records: [
-              {
-                id: await getUserInfo(session).then((user) => user.id),
-                deleted: true,
-              },
-            ],
-            typecast: true,
-          },
+          url: `${AIRTABLE_URL}/Hosts/${await getUserInfo(session).then(
+            (user) => user.id
+          )}`,
           headers: {
             Authorization: `Bearer ${AIRTABLE_API_KEY}`,
             'Content-Type': 'application/json',
           },
         });
-        return res.status(200).json({ deleted });
+        return res
+          .status(204)
+          .json({ message: 'Profile successfully deleted' });
 
       default:
         res.status(404).json({ info: 'method not implemented' });

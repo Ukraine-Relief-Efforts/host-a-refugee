@@ -3,7 +3,7 @@ import {
   Text,
   Space,
   Button,
-  Container,
+  Group,
 } from '@mantine/core';
 
 interface ModalProps {
@@ -25,11 +25,9 @@ export const Modal = ({ opened, onClose, title, message }: ModalProps) => {
     >
       <Text>{message}</Text>
       <Space h="xl" />
-      <Container
-        style={{ width: '100%', display: 'flex', justifyContent: 'right' }}
-      >
+      <Group position="right">
         <Button onClick={onClose}>Close</Button>
-      </Container>
+      </Group>
     </MantineModal>
   );
 };

@@ -1,7 +1,8 @@
 import Head from 'next/head';
 import { GetServerSideProps } from 'next';
+import Link from 'next/link';
 import { getSession } from 'next-auth/react';
-import { Space, Paper, Text, Title, Group, Badge, Center } from '@mantine/core';
+import { Space, Paper, Text, Title, Group, Badge, Button } from '@mantine/core';
 import { AiOutlineCheck, AiOutlineClose } from 'react-icons/ai';
 import { Layout } from '../../components';
 import { getUserInfo } from '../api/users';
@@ -37,6 +38,11 @@ export default function ProfilePage({ user }: { user: User }) {
                   </Group>
                 </Badge>
               )}
+              <Link href="/profile/edit" passHref>
+                <a>
+                  <Button>Edit</Button>
+                </a>
+              </Link>
             </Group>
             <Space />
             <Group direction="column">

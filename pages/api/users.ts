@@ -80,14 +80,24 @@ export default async function handler(
           });
         }
 
-        const { termsOfService, ...rest } = req.body;
         const { data: created } = await axios({
           method: 'POST',
           url: `${AIRTABLE_URL}/Hosts`,
           data: {
             records: [
               {
-                fields: rest,
+                fields: {
+                  name: req.body.name,
+                  email: req.body.email,
+                  country: req.body.country,
+                  accomodationDetails: req.body.accomodationDetails,
+                  groupSize: req.body.groupSize,
+                  phoneNumber: req.body.phoneNumber,
+                  languages: req.body.languages,
+                  dateStart: req.body.dateStart,
+                  dateEnd: req.body.dateEnd,
+                  userType: req.body.userType,
+                },
               },
             ],
             typecast: true,
@@ -96,30 +106,38 @@ export default async function handler(
         });
         return res.status(200).json({ created });
 
-      case 'PUT':
-        for (const key in req.body) {
-          if (!allowedUpdates.includes(key)) throw new Error('Invalid update!');
-        }
+      case 'PATCH':
+        const { id } = await getUserInfo(session);
 
         const { data: updated } = await axios({
-          method: 'PUT',
+          method: 'PATCH',
           url: `${AIRTABLE_URL}/Hosts`,
           data: {
             records: [
               {
-                fields: req.body,
+                id,
+                fields: {
+                  name: req.body.name,
+                  email: req.body.email,
+                  country: req.body.country,
+                  accomodationDetails: req.body.accomodationDetails,
+                  groupSize: req.body.groupSize,
+                  phoneNumber: req.body.phoneNumber,
+                  languages: req.body.languages,
+                  dateStart: req.body.dateStart,
+                  dateEnd: req.body.dateEnd,
+                  userType: req.body.userType,
+                },
               },
             ],
             typecast: true,
           },
-          headers: { Authorization: `Bearer ${AIRTABLE_API_KEY}` },
+          headers: {
+            Authorization: `Bearer ${AIRTABLE_API_KEY}`,
+            'Content-Type': 'application/json',
+          },
         });
         return res.status(200).json({ updated });
-
-      // case 'DELETE':
-      //   const { data: deleted } = await axios({
-      //     method: 'DELETE',
-      //     url: `${AIRTABLE_URL}/Hosts/`,
 
       default:
         res.status(404).json({ info: 'method not implemented' });
@@ -132,6 +150,7 @@ export default async function handler(
 
 const allowedUpdates = [
   'name',
+  'email',
   'userType',
   'phoneNumber',
   'country',

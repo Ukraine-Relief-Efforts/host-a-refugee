@@ -35,13 +35,13 @@ interface SignupFormProps {
     userType: string;
     phoneNumber: string;
     country: string;
-    city: string;
-    accomodationDetails: string;
+    city?: string;
+    accomodationDetails?: string;
     groupSize: number;
-    languages: string;
-    termsOfService: boolean;
+    languages: string | string[];
+    termsOfService?: boolean;
   };
-  method: 'POST' | 'PUT';
+  method: 'POST' | 'PATCH';
   url: string;
 }
 
@@ -87,6 +87,12 @@ export const SignupForm = ({ initialValues, method, url }: SignupFormProps) => {
         } and will be in touch with you as soon as possible!`
       : 'Your profile was successfully updated!';
 
+  const handleModalClose = () => {
+    form.reset();
+    setIsSuccess(false);
+    return push('/profile');
+  };
+
   const onSubmitHandler = async (values: typeof form['values']) => {
     setIsSubmitting(true);
     setError('');
@@ -111,11 +117,6 @@ export const SignupForm = ({ initialValues, method, url }: SignupFormProps) => {
     }
 
     return setIsSubmitting(false);
-  };
-
-  const handleModalClose = () => {
-    setIsSuccess(false);
-    return push('/');
   };
 
   return (
@@ -218,11 +219,13 @@ export const SignupForm = ({ initialValues, method, url }: SignupFormProps) => {
             required
           />
 
-          <Checkbox
-            {...form.getInputProps('termsOfService')}
-            label="I agree to the terms of service"
-            required
-          />
+          {method === 'POST' && (
+            <Checkbox
+              {...form.getInputProps('termsOfService')}
+              label="I agree to the terms of service"
+              required
+            />
+          )}
 
           <Button type="submit" color="teal">
             Submit

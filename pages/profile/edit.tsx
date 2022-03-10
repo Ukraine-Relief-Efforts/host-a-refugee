@@ -8,34 +8,27 @@ import { User } from '../../models';
 
 export default function EditPage({ user }: { user: User }) {
   console.log(user);
-
   const initialValues = {
-    userType: '',
-    phoneNumber: '',
-    country: 'PL',
-    city: '',
-    accomodationDetails: '',
-    groupSize: 1,
-    languages: '',
-    termsOfService: false,
+    ...user.fields,
+    termsOfService: true,
   };
 
   return (
     <>
       <Head>
-        <title>Register</title>
+        <title>Edit Profile</title>
         <meta name="description" content="Sign up for Host a Refugee" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <Layout>
         <Paper padding="lg" shadow="sm" radius="md" withBorder>
-          <Title order={3}>Register</Title>
+          <Title order={3}>Edit Profile</Title>
           <Space h="lg" />
 
           <SignupForm
             initialValues={initialValues}
-            method="POST"
+            method="PATCH"
             url="/api/users"
           />
         </Paper>
@@ -57,14 +50,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   }
 
   const user = await getUserInfo(session);
-  if (user) {
-    return {
-      redirect: {
-        destination: '/profile',
-        permanent: false,
-      },
-    };
-  }
 
   return {
     props: { user },

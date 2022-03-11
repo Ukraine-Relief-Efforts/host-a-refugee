@@ -23,8 +23,6 @@ import { DateRangePicker } from '@mantine/dates';
 import { citiesOptions } from '../data/citiesOptions';
 import { Modal } from '.';
 
-import { getForwardGeocodingInfo } from '../pages/api/location';
-
 const languagesOptions = [
   { value: 'English', label: 'English' },
   { value: 'Ukrainian', label: 'Ukrainian' },
@@ -83,9 +81,14 @@ export const SignupForm = () => {
     country: string
   ): Promise<any> => {
     try {
-      const { latitude, longitude } = await getForwardGeocodingInfo(
-        city || country
-      );
+      const { data } = await axios({
+        method: 'POST',
+        url: '/api/location',
+        data: {
+          location: city || country,
+        },
+      });
+      const { latitude, longitude } = data;
       return [latitude, longitude];
     } catch (error: any) {
       console.error(error);

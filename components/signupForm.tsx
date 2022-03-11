@@ -66,12 +66,14 @@ export const SignupForm = ({ initialValues, method, url }: SignupFormProps) => {
         return !!value || value.match(regEx) !== null;
       },
       languages: (value) => !!value,
+      groupSize: (value) => value > 0,
     },
     errorMessages: {
       userType: 'Please select your registration type',
       phoneNumber:
-        'Please input a valid phone number and include the country code.',
+        'Please input a valid phone number and include the country code',
       languages: 'Please select at least one language',
+      groupSize: 'Please enter an integer greater than 0',
     },
   });
 
@@ -230,6 +232,7 @@ export const SignupForm = ({ initialValues, method, url }: SignupFormProps) => {
                 ? 'Number of people in your group'
                 : 'Number of people you can accomodate'
             }
+            min={1}
             required
           />
 

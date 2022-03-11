@@ -93,22 +93,44 @@ export const SignupForm = ({ initialValues, method, url }: SignupFormProps) => {
     return push('/profile');
   };
 
+  const retrieveLatLng = async (location: string): Promise<any> => {
+    try {
+      const { data } = await axios({
+        method: 'POST',
+        url: '/api/location',
+        data: {
+          location,
+        },
+      });
+      const { latitude, longitude } = data;
+      return [latitude, longitude];
+    } catch (error: any) {
+      console.error(error);
+    }
+  };
+
   const onSubmitHandler = async (values: typeof form['values']) => {
     setIsSubmitting(true);
     setError('');
 
     try {
+      const [lat, lng] = await retrieveLatLng(values.city || values.country);
+
+      const data = {
+        ...values,
+        dateStart: dates[0],
+        dateEnd: dates[1],
+        name: session?.user?.name,
+        email: session?.user?.email,
+        avatar: session?.user?.image,
+        lat,
+        lng,
+      };
+
       await axios({
         method,
         url,
-        data: {
-          ...values,
-          dateStart: dates[0],
-          dateEnd: dates[1],
-          name: session?.user?.name,
-          email: session?.user?.email,
-          avatar: session?.user?.image,
-        },
+        data,
       });
       setIsSuccess(true);
     } catch (error: any) {

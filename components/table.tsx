@@ -8,85 +8,146 @@ import {
   Table as CoreTable,
   Avatar,
 } from '@mantine/core';
+import { RangeCalendar } from '@mantine/dates';
 import { MdOutlineHouse } from 'react-icons/md';
 import { User } from '../models';
+import dynamic from 'next/dynamic';
 
-type TableProps = { data: User[] };
+const Map = dynamic(() => import('./map'), { ssr: false });
 
-export const Table = ({ data }: TableProps) => {
+type TableProps = { data: User[]; type: string };
+
+export const Table = ({ data, type }: TableProps) => {
   const [opened, setOpened] = useState(false);
-  const [focused, setFocused] = useState<User>();
+  const [focused, setFocused] = useState<User | null>();
+  const [value, setValue] = useState<[Date, Date]>([new Date(), new Date()]);
 
-  const mapRows = data?.map((element) => (
-    <tr key={element.id}>
-      <td>{element.fields.country}</td>
-      <td>
-        from <Code>{element.fields.dateStart || 'null'}</Code> to{' '}
-        <Code>{element.fields.dateStart || 'null'}</Code>
-      </td>
-      <td>{element.fields.groupSize}</td>
-      <td>
-        <Button
-          variant="light"
-          size="xs"
-          onClick={() => {
-            setOpened(true);
-            setFocused(element);
-          }}
-          leftIcon={
-            <MdOutlineHouse style={{ height: '1rem', width: '1rem' }} />
-          }
-        >
-          Contact
-        </Button>
-      </td>
-    </tr>
-  ));
+  const mapRows = data?.map((element) => {
+    const {
+      id,
+      fields: { country, city, dateStart, dateEnd, groupSize },
+    } = element;
+    return (
+      <tr key={id}>
+        <td>
+          {country || city ? (
+            <>
+              {city} {country}
+            </>
+          ) : (
+            '-'
+          )}
+        </td>
+        <td>
+          {dateStart && dateEnd ? (
+            <>
+              From <Code>{dateStart}</Code> to <Code>{dateEnd}</Code>
+            </>
+          ) : (
+            'Flexible'
+          )}
+        </td>
+        <td>{groupSize}</td>
+        <td>
+          <Button
+            variant="light"
+            size="xs"
+            onClick={() => {
+              const {
+                fields: { dateStart, dateEnd },
+              } = element;
+              const start: Date = dateStart ? new Date(dateStart) : new Date();
+              const end: Date = dateEnd ? new Date(dateEnd) : new Date();
+              setValue([start, end]);
+              setOpened(true);
+              setFocused(element);
+            }}
+            leftIcon={
+              <MdOutlineHouse style={{ height: '1rem', width: '1rem' }} />
+            }
+          >
+            Info
+          </Button>
+        </td>
+      </tr>
+    );
+  });
 
-  return (
-    <>
-      <Modal opened={opened} onClose={() => setOpened(false)}>
+  const renderModal = () => {
+    if (!focused) return null;
+
+    const {
+      fields: {
+        avatar,
+        city,
+        country,
+        lat,
+        lng,
+        accomodationDetails,
+        languages,
+        dateStart,
+        dateEnd,
+      },
+    } = focused;
+
+    return (
+      <Modal
+        opened={opened}
+        onClose={() => {
+          setOpened(false);
+          setFocused(null);
+          setValue([new Date(), new Date()]);
+        }}
+      >
         <Group direction="column">
-          <Avatar
-            radius="xl"
-            size="lg"
-            src={focused?.fields.avatar}
-            alt="it's me"
-          />
+          <Avatar radius="xl" size="lg" src={avatar} alt="it's me" />
           <Text>
-            <b>Location:</b> {focused?.fields.country}
+            <b>Location:</b> {city} {country}
           </Text>
+          {lat && lng && <Map pin={{ lat, lng, city, country }} />}
           <Text>
-            <b>Name:</b> {focused?.fields.name}
-          </Text>
-          <Text>
-            <b>Details:</b> {focused?.fields.accomodationDetails}
+            <b>Details:</b> {accomodationDetails}
           </Text>
           <Text>
             <b>Languages: </b>
-            {focused?.fields.languages}
+            {languages ? (
+              <ul>
+                {languages.map((language, index) => {
+                  return <li key={`${language}${index}`}>{language}</li>;
+                })}
+              </ul>
+            ) : (
+              <ul>Unspecified</ul>
+            )}
           </Text>
-          <Text>
-            <b>Phone: </b>
-            {focused?.fields.phoneNumber}
-          </Text>
-          <Text>
-            <b>Email:</b> {focused?.fields.email}
-          </Text>
-          <Text>
-            <b>Date:</b> {focused?.fields.dateStart} - {focused?.fields.dateEnd}
-          </Text>
+          {dateStart && dateEnd && (
+            <>
+              <Text>
+                <b>Date:</b> {dateStart} to {dateEnd}
+              </Text>
+              <RangeCalendar
+                initialMonth={new Date(dateStart)}
+                value={value}
+                onChange={() => void 0}
+              />
+            </>
+          )}
         </Group>
       </Modal>
+    );
+  };
 
+  return (
+    <>
+      {renderModal()}
       <div style={{ width: '100%', maxHeight: 500, overflow: 'auto' }}>
         <CoreTable striped horizontalSpacing={'xs'} verticalSpacing={'xs'}>
           <thead>
             <tr>
               <th>Location</th>
               <th>Dates</th>
-              <th>Cap.</th>
-              <th>Contact host</th>
+              <th>People</th>
+              <th>About {type}</th>
             </tr>
           </thead>
           <tbody>{mapRows}</tbody>

@@ -55,6 +55,8 @@ export const SignupForm = () => {
       groupSize: 1,
       languages: '',
       termsOfService: false,
+      lat: '',
+      lng: '',
     },
     validationRules: {
       userType: (value) => !!value,
@@ -74,22 +76,47 @@ export const SignupForm = () => {
 
   const { userType } = form.values;
 
+  const retrieveLatLng = async (
+    city: string,
+    country: string
+  ): Promise<any> => {
+    try {
+      const { data } = await axios({
+        method: 'POST',
+        url: '/api/location',
+        data: {
+          location: city || country,
+        },
+      });
+      const { latitude, longitude } = data;
+      return [latitude, longitude];
+    } catch (error: any) {
+      console.error(error);
+    }
+  };
+
   const onSubmitHandler = async (values: typeof form['values']) => {
     setIsSubmitting(true);
     setError('');
 
     try {
+      const [lat, lng] = await retrieveLatLng(values.city, values.country);
+
+      const data = {
+        ...values,
+        dateStart: dates[0],
+        dateEnd: dates[1],
+        name: session?.user?.name,
+        email: session?.user?.email,
+        avatar: session?.user?.image,
+        lat,
+        lng,
+      };
+
       await axios({
         method: 'POST',
         url: '/api/users',
-        data: {
-          ...values,
-          dateStart: dates[0],
-          dateEnd: dates[1],
-          name: session?.user?.name,
-          email: session?.user?.email,
-          avatar: session?.user?.image,
-        },
+        data,
       });
       setIsSuccess(true);
     } catch (error: any) {

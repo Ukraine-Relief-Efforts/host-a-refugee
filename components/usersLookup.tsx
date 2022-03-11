@@ -16,12 +16,12 @@ export const UsersLookup = ({ hosts, refugees }: HostLookupProps) => {
         </Title>
         <Tabs grow>
           <Tabs.Tab label="Hosts" icon={<MdHouse />}>
-            <Table data={hosts} />
+            <Table data={hosts} type="host" />
             <Space h="xl" />
             <Map pins={hosts} />
           </Tabs.Tab>
           <Tabs.Tab label="Refugees" icon={<MdPersonSearch />}>
-            <Table data={refugees} />
+            <Table data={refugees} type="refugee" />
             <Space h="xl" />
             <Map pins={refugees} />
           </Tabs.Tab>

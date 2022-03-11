@@ -4,6 +4,7 @@ import { getSession } from 'next-auth/react';
 import type { Session } from 'next-auth';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { filterByFormula } from '../../utils';
+import { User } from '../../models/index';
 
 export async function getAllUsers() {
   try {
@@ -21,7 +22,24 @@ export async function getAllUsers() {
       },
     });
 
-    return { hosts, refugees };
+    const removeSensitiveData = (obj: { records: User[] }) => {
+      const result = { records: [] as User[] };
+      result.records = obj.records.map((user: User) => {
+        const { id, createdTime } = user;
+        const { name, phoneNumber, email, ...objWithoutSensitiveData } =
+          user.fields;
+        return { id, fields: { ...objWithoutSensitiveData }, createdTime };
+      });
+      return result;
+    };
+
+    const hostsWithoutSensitiveData = removeSensitiveData(hosts);
+    const refugeesWithoutSensitiveData = removeSensitiveData(refugees);
+
+    return {
+      hosts: hostsWithoutSensitiveData,
+      refugees: refugeesWithoutSensitiveData,
+    };
   } catch (error: any) {
     console.log(error);
     throw new Error(error.message);

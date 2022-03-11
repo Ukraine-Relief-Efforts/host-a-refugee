@@ -1,10 +1,10 @@
 export type User = {
   id: string;
   fields: {
-    name: string;
+    name?: string;
     userType: string;
-    phoneNumber: string;
-    email: string;
+    phoneNumber?: string;
+    email?: string;
     country: string;
     city: string;
     lat: number;
@@ -18,6 +18,13 @@ export type User = {
     verified?: boolean;
   };
   createdTime: string;
+};
+
+export type Location = {
+  lat: number;
+  lng: number;
+  country: string;
+  city: string;
 };
 
 export type Partner = {

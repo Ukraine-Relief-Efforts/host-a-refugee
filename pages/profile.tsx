@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/react';
-import { Space, Paper, Text, Title, Group, Badge, Center } from '@mantine/core';
+import { Space, Paper, Text, Title, Group, Badge } from '@mantine/core';
 import { AiOutlineCheck, AiOutlineClose } from 'react-icons/ai';
 import { Layout } from '../components';
 import { getUserInfo } from './api/users';

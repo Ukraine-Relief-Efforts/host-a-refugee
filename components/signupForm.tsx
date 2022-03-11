@@ -96,23 +96,20 @@ export const SignupForm = () => {
     setIsSubmitting(true);
     setError('');
 
-    const [lat, lng] = await retrieveLatLng(values.city, values.country);
-
-    const data = {
-      ...values,
-      dateStart: dates[0],
-      dateEnd: dates[1],
-      name: session?.user?.name,
-      email: session?.user?.email,
-      avatar: session?.user?.image,
-    };
-
-    if (lat && lng) {
-      data.lat = lat;
-      data.lng = lng;
-    }
-
     try {
+      const [lat, lng] = await retrieveLatLng(values.city, values.country);
+
+      const data = {
+        ...values,
+        dateStart: dates[0],
+        dateEnd: dates[1],
+        name: session?.user?.name,
+        email: session?.user?.email,
+        avatar: session?.user?.image,
+        lat,
+        lng,
+      };
+
       await axios({
         method: 'POST',
         url: '/api/users',

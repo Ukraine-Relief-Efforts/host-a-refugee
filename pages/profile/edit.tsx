@@ -94,7 +94,7 @@ export default function EditPage({ user }: { user: User }) {
         </Group>
       </Modal>
 
-      <Layout>
+      <Layout size="sm">
         <Paper padding="lg" shadow="sm" radius="md" withBorder>
           <LoadingOverlay visible={isDeleting} />
 

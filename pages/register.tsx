@@ -25,7 +25,7 @@ export default function RegisterPage() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Layout>
+      <Layout size="sm">
         <Paper padding="lg" shadow="sm" radius="md" withBorder>
           <Title order={3}>Register</Title>
           <Space h="lg" />

@@ -76,6 +76,20 @@ export default async function handler(
       query: { profile },
     } = req;
 
+    const fields = {
+      name: req.body.name,
+      email: req.body.email,
+      city: req.body.city,
+      country: req.body.country,
+      accomodationDetails: req.body.accomodationDetails,
+      groupSize: req.body.groupSize,
+      phoneNumber: req.body.phoneNumber,
+      languages: req.body.languages,
+      dateStart: req.body.dateStart,
+      dateEnd: req.body.dateEnd,
+      userType: req.body.userType,
+    };
+
     switch (req.method) {
       case 'GET':
         if (!!profile) {
@@ -104,18 +118,7 @@ export default async function handler(
           data: {
             records: [
               {
-                fields: {
-                  name: req.body.name,
-                  email: req.body.email,
-                  country: req.body.country,
-                  accomodationDetails: req.body.accomodationDetails,
-                  groupSize: req.body.groupSize,
-                  phoneNumber: req.body.phoneNumber,
-                  languages: req.body.languages,
-                  dateStart: req.body.dateStart,
-                  dateEnd: req.body.dateEnd,
-                  userType: req.body.userType,
-                },
+                fields,
               },
             ],
             typecast: true,
@@ -135,18 +138,7 @@ export default async function handler(
             records: [
               {
                 id: await getUserInfo(session).then((user) => user.id),
-                fields: {
-                  name: req.body.name,
-                  email: req.body.email,
-                  country: req.body.country,
-                  accomodationDetails: req.body.accomodationDetails,
-                  groupSize: req.body.groupSize,
-                  phoneNumber: req.body.phoneNumber,
-                  languages: req.body.languages,
-                  dateStart: req.body.dateStart,
-                  dateEnd: req.body.dateEnd,
-                  userType: req.body.userType,
-                },
+                fields,
               },
             ],
             typecast: true,

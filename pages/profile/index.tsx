@@ -63,7 +63,9 @@ export default function ProfilePage({ user }: { user: User }) {
               <Group>
                 <Text weight="bold">City / region:</Text>
                 <Text color="dimmed">
-                  {user.fields.city}, {user.fields.country}
+                  {`${user.fields.city ? user.fields.city + ', ' : ''}${
+                    user.fields.country
+                  }`}
                 </Text>
               </Group>
               <Group>

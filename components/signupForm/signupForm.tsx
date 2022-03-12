@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from '@mantine/hooks';
 import axios from 'axios';
@@ -20,8 +20,10 @@ import {
 import { MdPhone } from 'react-icons/md';
 import { useSession } from 'next-auth/react';
 import { DateRangePicker } from '@mantine/dates';
-import { citiesOptions } from '../data/citiesOptions';
-import { Modal } from '.';
+import { citiesOptions } from '../../data/citiesOptions';
+import { Modal } from '..';
+import { LanguageContext } from '../../context';
+import { labels } from './content';
 
 const languagesOptions = [
   { value: 'English', label: 'English' },
@@ -32,8 +34,10 @@ const languagesOptions = [
   { value: 'German', label: 'German' },
   { value: 'Hungarian', label: 'Hungarian' },
 ];
+type languageOptions = 'eng' | 'ua' | 'pl' | 'ro' | 'sk' | 'de' | 'hu';
 
 export const SignupForm = () => {
+  const { language } = useContext(LanguageContext);
   const { push } = useRouter();
   const { data: session } = useSession();
   const [dates, setDates] = useState<[Date | null, Date | null]>([
@@ -67,10 +71,9 @@ export const SignupForm = () => {
       languages: (value) => !!value,
     },
     errorMessages: {
-      userType: 'Please select your registration type',
-      phoneNumber:
-        'Please input a valid phone number and include the country code.',
-      languages: 'Please select at least one language',
+      userType: labels.registerTypeError[language],
+      phoneNumber: labels.phoneNumberError[language],
+      languages: labels.languagesError[language],
     },
   });
 
@@ -142,13 +145,11 @@ export const SignupForm = () => {
         opened={isSuccess}
         onClose={handleModalClose}
         title="Success!"
-        message={`Your registration was successful${
+        message={
           userType === 'host'
-            ? ", we can't thank you enough for your support in these tough times 💗"
-            : '.'
-        } We're working on matching you with a ${
-          userType === 'refugee' ? 'host' : 'refugee'
-        } and will be in touch with you as soon as possible!`}
+            ? labels.modalMessageHost[language]
+            : labels.modalMessageRefugee[language]
+        }
       />
 
       <form onSubmit={form.onSubmit(onSubmitHandler)}>
@@ -156,8 +157,8 @@ export const SignupForm = () => {
           <LoadingOverlay visible={isSubmitting} />
           <Select
             {...form.getInputProps('userType')}
-            label="Register type"
-            placeholder="Refugee / Host"
+            label={labels.registerTypeLabel[language]}
+            placeholder={labels.registerTypePlaceholder[language]}
             data={[
               { value: 'refugee', label: 'Refugee' },
               { value: 'host', label: 'Host' },
@@ -168,8 +169,8 @@ export const SignupForm = () => {
           <TextInput
             {...form.getInputProps('phoneNumber')}
             icon={<MdPhone />}
-            placeholder="+03 123 456 789"
-            label="Phone Number"
+            placeholder={labels.phoneNumberPlaceholder[language]}
+            label={labels.phoneNumberLabel[language]}
             required
           />
 
@@ -198,9 +199,11 @@ export const SignupForm = () => {
             maxDropdownHeight={250}
             nothingFound="No options"
             label={
-              userType === 'refugee' ? 'Destination city' : 'City of residence'
+              userType === 'refugee'
+                ? labels.cityLabelRefugee[language]
+                : labels.cityLabelHost[language]
             }
-            placeholder="City of ..."
+            placeholder={labels.cityPlaceholder[language]}
             data={citiesOptions[
               form.values.country as keyof typeof citiesOptions
             ].map((city, index) => ({
@@ -210,26 +213,26 @@ export const SignupForm = () => {
           />
 
           <DateRangePicker
-            label="Accomodation dates"
-            placeholder="Pick dates range"
+            label={labels.datesLabel[language]}
+            placeholder={labels.datesPlaceholder[language]}
             value={dates}
             onChange={setDates}
           />
 
           <Textarea
             {...form.getInputProps('accomodationDetails')}
-            placeholder="About the accomodation and Rules"
-            label="Accomodation details"
+            placeholder={labels.detailsPlaceholder[language]}
+            label={labels.detailsLabel[language]}
           />
 
           <NumberInput
             defaultValue={2}
             {...form.getInputProps('groupSize')}
-            placeholder="Number of people"
+            placeholder={labels.groupSizePlaceholder[language]}
             label={
               userType === 'refugee'
-                ? 'Number of people in your group'
-                : 'Number of people you can accomodate'
+                ? labels.groupSizeLabelRefugee[language]
+                : labels.groupSizeLabelHost[language]
             }
             required
           />
@@ -237,19 +240,19 @@ export const SignupForm = () => {
           <MultiSelect
             {...form.getInputProps('languages')}
             data={languagesOptions}
-            label="Spoken languages"
-            placeholder="Pick the languages you can use"
+            label={labels.languagesLabel[language]}
+            placeholder={labels.languagesPlaceholder[language]}
             required
           />
 
           <Checkbox
             {...form.getInputProps('termsOfService')}
-            label="I agree to the terms of service"
+            label={labels.tosLabel[language]}
             required
           />
 
           <Button type="submit" color="teal">
-            Submit
+            {labels.buttonText[language]}
           </Button>
 
           {error && (

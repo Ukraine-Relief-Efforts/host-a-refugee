@@ -1,0 +1,1 @@
+export { PartnersTable } from './partnersTable';

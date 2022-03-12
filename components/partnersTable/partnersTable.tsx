@@ -1,5 +1,5 @@
 import { Table } from '@mantine/core';
-import { Partner } from '../models';
+import { Partner } from '../../models';
 
 type PartnerProps = { data: Partner[] };
 

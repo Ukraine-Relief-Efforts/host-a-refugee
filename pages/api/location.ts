@@ -8,6 +8,7 @@ export default async function handler(
 ) {
   const { location } = req.body;
 
+  // TODO: use CitiesData.ts to get the coordinates instead of using an external api
   switch (req.method) {
     case 'POST':
       try {
@@ -21,6 +22,8 @@ export default async function handler(
         });
 
         const { latitude, longitude } = data[0];
+
+        console.log(data)
 
         return res.status(201).json({ latitude, longitude });
       } catch (error: any) {

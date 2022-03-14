@@ -81,16 +81,6 @@ export const SignupForm = ({ initialValues, method, url }: SignupFormProps) => {
   });
 
   const { userType } = form.values;
-  const successMessage =
-    method === 'POST'
-      ? `Your registration was successful${
-          userType === 'host'
-            ? ", we can't thank you enough for your support in these tough times 💗"
-            : '.'
-        } We're working on matching you with a ${
-          userType === 'refugee' ? 'host' : 'refugee'
-        } and will be in touch with you as soon as possible!`
-      : 'Your profile was successfully updated!';
 
   const handleModalClose = () => {
     form.reset();
@@ -117,7 +107,7 @@ export const SignupForm = ({ initialValues, method, url }: SignupFormProps) => {
   const onSubmitHandler = async (values: typeof form['values']) => {
     setIsSubmitting(true);
     setError('');
-    console.log(values);
+
     try {
       const [lat, lng] = await retrieveLatLng(
         values.city || countryAbbrs[values.country]

@@ -7,7 +7,6 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const { location } = req.body;
-
   switch (req.method) {
     case 'POST':
       try {

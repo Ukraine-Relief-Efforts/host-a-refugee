@@ -1,4 +1,4 @@
-import { useEffect, useState, createContext } from 'react';
+import Dispatch, { useEffect, useState, createContext } from 'react';
 import { languageOptions } from '../models';
 
 const getSavedValue = (key: string): any => {
@@ -10,11 +10,17 @@ const getSavedValue = (key: string): any => {
       return res[key];
     }
   }
-
   return undefined;
 };
 
-export const LanguageContext = createContext({});
+type LanguageContextType = {
+  language: languageOptions;
+  setLanguage: Dispatch.Dispatch<Dispatch.SetStateAction<languageOptions>>;
+};
+
+export const LanguageContext = createContext<LanguageContextType>(
+  {} as LanguageContextType
+);
 export const LanguageProvider = ({ children }: any) => {
   const [language, setLanguage] = useState<languageOptions>(
     () => getSavedValue('lang') || 'eng'

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { useForm } from '@mantine/hooks';
@@ -15,11 +15,13 @@ import {
   Group,
   LoadingOverlay,
 } from '@mantine/core';
-import { Modal } from '.';
+import { Modal } from '..';
 import { MdPhone } from 'react-icons/md';
 import { DateRangePicker } from '@mantine/dates';
-import { citiesOptions } from '../data/citiesOptions';
-import countryAbbrs from '../data/countryAbbrs';
+import { citiesOptions } from '../../data/citiesOptions';
+import countryAbbrs from '../../data/countryAbbrs';
+import { LanguageContext } from '../../context';
+import { labels } from './content';
 
 const languagesOptions = [
   { value: 'English', label: 'English' },
@@ -47,6 +49,8 @@ interface SignupFormProps {
 }
 
 export const SignupForm = ({ initialValues, method, url }: SignupFormProps) => {
+  const { language } = useContext(LanguageContext);
+
   const { push } = useRouter();
   const { data: session } = useSession();
 
@@ -70,25 +74,13 @@ export const SignupForm = ({ initialValues, method, url }: SignupFormProps) => {
       groupSize: (value) => value > 0,
     },
     errorMessages: {
-      userType: 'Please select your registration type',
-      phoneNumber:
-        'Please input a valid phone number and include the country code',
-      languages: 'Please select at least one language',
-      groupSize: 'Please enter an integer greater than 0',
+      userType: labels.registerTypeError[language],
+      phoneNumber: labels.phoneNumberError[language],
+      languages: labels.languagesError[language],
     },
   });
 
   const { userType } = form.values;
-  const successMessage =
-    method === 'POST'
-      ? `Your registration was successful${
-          userType === 'host'
-            ? ", we can't thank you enough for your support in these tough times 💗"
-            : '.'
-        } We're working on matching you with a ${
-          userType === 'refugee' ? 'host' : 'refugee'
-        } and will be in touch with you as soon as possible!`
-      : 'Your profile was successfully updated!';
 
   const handleModalClose = () => {
     form.reset();
@@ -115,7 +107,7 @@ export const SignupForm = ({ initialValues, method, url }: SignupFormProps) => {
   const onSubmitHandler = async (values: typeof form['values']) => {
     setIsSubmitting(true);
     setError('');
-    console.log(values);
+
     try {
       const [lat, lng] = await retrieveLatLng(
         values.city || countryAbbrs[values.country]
@@ -152,7 +144,11 @@ export const SignupForm = ({ initialValues, method, url }: SignupFormProps) => {
         opened={isSuccess}
         onClose={handleModalClose}
         title="Success!"
-        message={successMessage}
+        message={
+          userType === 'host'
+            ? labels.modalMessageHost[language]
+            : labels.modalMessageRefugee[language]
+        }
       />
 
       <form onSubmit={form.onSubmit(onSubmitHandler)}>
@@ -160,8 +156,8 @@ export const SignupForm = ({ initialValues, method, url }: SignupFormProps) => {
           <LoadingOverlay visible={isSubmitting} />
           <Select
             {...form.getInputProps('userType')}
-            label="Register type"
-            placeholder="Refugee / Host"
+            label={labels.registerTypeLabel[language]}
+            placeholder={labels.registerTypePlaceholder[language]}
             data={[
               { value: 'refugee', label: 'Refugee' },
               { value: 'host', label: 'Host' },
@@ -172,8 +168,8 @@ export const SignupForm = ({ initialValues, method, url }: SignupFormProps) => {
           <TextInput
             {...form.getInputProps('phoneNumber')}
             icon={<MdPhone />}
-            placeholder="+03 123 456 789"
-            label="Phone Number"
+            placeholder={labels.phoneNumberPlaceholder[language]}
+            label={labels.phoneNumberLabel[language]}
             required
           />
 
@@ -199,9 +195,11 @@ export const SignupForm = ({ initialValues, method, url }: SignupFormProps) => {
             maxDropdownHeight={250}
             nothingFound="No options"
             label={
-              userType === 'refugee' ? 'Destination city' : 'City of residence'
+              userType === 'refugee'
+                ? labels.cityLabelRefugee[language]
+                : labels.cityLabelHost[language]
             }
-            placeholder="City of ..."
+            placeholder={labels.cityPlaceholder[language]}
             data={citiesOptions[
               form.values.country as keyof typeof citiesOptions
             ].map((city, index) => ({
@@ -211,26 +209,26 @@ export const SignupForm = ({ initialValues, method, url }: SignupFormProps) => {
           />
 
           <DateRangePicker
-            label="Accomodation dates"
-            placeholder="Pick dates range"
+            label={labels.datesLabel[language]}
+            placeholder={labels.datesPlaceholder[language]}
             value={dates}
             onChange={setDates}
           />
 
           <Textarea
             {...form.getInputProps('accomodationDetails')}
-            placeholder="About the accomodation and Rules"
-            label="Accomodation details"
+            placeholder={labels.detailsPlaceholder[language]}
+            label={labels.detailsLabel[language]}
           />
 
           <NumberInput
             defaultValue={2}
             {...form.getInputProps('groupSize')}
-            placeholder="Number of people"
+            placeholder={labels.groupSizePlaceholder[language]}
             label={
               userType === 'refugee'
-                ? 'Number of people in your group'
-                : 'Number of people you can accomodate'
+                ? labels.groupSizeLabelRefugee[language]
+                : labels.groupSizeLabelHost[language]
             }
             min={1}
             required
@@ -239,21 +237,21 @@ export const SignupForm = ({ initialValues, method, url }: SignupFormProps) => {
           <MultiSelect
             {...form.getInputProps('languages')}
             data={languagesOptions}
-            label="Spoken languages"
-            placeholder="Pick the languages you can use"
+            label={labels.languagesLabel[language]}
+            placeholder={labels.languagesPlaceholder[language]}
             required
           />
 
           {method === 'POST' && (
             <Checkbox
               {...form.getInputProps('termsOfService')}
-              label="I agree to the terms of service"
+              label={labels.tosLabel[language]}
               required
             />
           )}
 
           <Button type="submit" color="teal">
-            Submit
+            {labels.buttonText[language]}
           </Button>
 
           {error && (

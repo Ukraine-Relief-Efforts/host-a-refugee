@@ -1,12 +1,12 @@
 export const labels = {
   menuHome: {
     eng: 'Home',
-    ua: 'Home ua',
-    pl: 'Home pl',
-    sk: 'Home sk',
-    hu: 'Home hu',
-    ro: 'Home ro',
-    de: 'Home de',
+    ua: 'Додому',
+    pl: 'Dom',
+    sk: 'Domov',
+    hu: 'Kezdőlap',
+    ro: 'Acasă',
+    de: 'Startseite',
   },
   menuRegister: {
     eng: 'Register',

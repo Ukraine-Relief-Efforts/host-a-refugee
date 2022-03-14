@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import {
   Button,
   Group,
@@ -10,10 +10,13 @@ import {
 } from '@mantine/core';
 import { RangeCalendar } from '@mantine/dates';
 import { MdOutlineHouse } from 'react-icons/md';
-import { User } from '../models';
+import { User } from '../../models';
 import dynamic from 'next/dynamic';
+import { LanguageContext } from '../../context';
+import { labels } from './content';
+``;
 
-const Map = dynamic(() => import('./map'), { ssr: false });
+const Map = dynamic(() => import('../map/map'), { ssr: false });
 
 type TableProps = { data: User[]; type: string };
 
@@ -21,6 +24,7 @@ export const Table = ({ data, type }: TableProps) => {
   const [opened, setOpened] = useState(false);
   const [focused, setFocused] = useState<User | null>();
   const [value, setValue] = useState<[Date, Date]>([new Date(), new Date()]);
+  const { language } = useContext(LanguageContext);
 
   const mapRows = data?.map((element) => {
     const {
@@ -144,10 +148,12 @@ export const Table = ({ data, type }: TableProps) => {
         <CoreTable striped horizontalSpacing={'xs'} verticalSpacing={'xs'}>
           <thead>
             <tr>
-              <th>Location</th>
-              <th>Dates</th>
-              <th>People</th>
-              <th>About {type}</th>
+              <th>{labels.headerLocation[language]}</th>
+              <th>{labels.headerDates[language]}</th>
+              <th>{labels.headerPeople[language]}</th>
+              <th>
+                {labels.headerAbout[language]} {type}
+              </th>
             </tr>
           </thead>
           <tbody>{mapRows}</tbody>

@@ -1,18 +1,23 @@
+import { useContext } from 'react';
 import { Space, Paper, Title, Tabs } from '@mantine/core';
 import { MdPersonSearch, MdHouse } from 'react-icons/md';
-import { Table } from '.';
-import { User } from '../models';
+import { Table } from '..';
+import { User } from '../../models';
 import dynamic from 'next/dynamic';
+import { LanguageContext } from '../../context';
+import { labels } from './content';
 
-const Map = dynamic(() => import('./map'), { ssr: false });
+const Map = dynamic(() => import('../map/map'), { ssr: false });
 
 export const UsersLookup = ({ hosts, refugees }: HostLookupProps) => {
+  const { language } = useContext(LanguageContext);
+
   return (
     <>
       <Space h="xl" />
       <Paper shadow="sm" radius="md" withBorder padding={0}>
         <Title order={3} style={{ padding: '1rem' }}>
-          Registered people
+          {labels.title[language]}
         </Title>
         <Tabs grow>
           <Tabs.Tab label="Hosts" icon={<MdHouse />}>

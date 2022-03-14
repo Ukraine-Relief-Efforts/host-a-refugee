@@ -1,3 +1,5 @@
+import { useContext } from 'react';
+import Link from 'next/link';
 import {
   Space,
   Paper,
@@ -13,17 +15,19 @@ import { GrRun as RunIcon } from 'react-icons/gr';
 import { FaCity as CityIcon, FaHandsHelping as HelpIcon } from 'react-icons/fa';
 import { MdOutlineNightShelter as ShelterIcon } from 'react-icons/md';
 import { BsShieldCheck as ShieldIcon } from 'react-icons/bs';
-import Link from 'next/link';
+import { labels } from './content';
+import { LanguageContext } from '../../context';
 
 const iconStyles: {} = { marginRight: '0.5em' };
-
+type languageOptions = 'eng' | 'ua' | 'pl' | 'ro' | 'sk' | 'de' | 'hu';
 export const AboutIndex = () => {
+  const { language } = useContext(LanguageContext);
+
   return (
     <Paper padding="xl" shadow="sm" radius="md" withBorder>
       <Title order={3}>About us</Title>
       <Text size="lg" align="justify">
-        Host a refugee is a website dedicated to helping the refugees fleeing
-        ukraine.
+        {labels.aboutUs[language]}
       </Text>
       <Space h="xl" />
       <Center>
@@ -35,13 +39,11 @@ export const AboutIndex = () => {
               <RunIcon size="1.5em" />
             </Center>
             <Text size="lg" align="center" weight={700} underline>
-              If you are a refugee:
+              {labels.refugeeTitle[language]}
             </Text>
             <Space h="xs" />
             <Text size="lg" align="center">
-              Browse through the available hosts. Please be mindful of the
-              capacity of your host concerning the amount of people, and the
-              available dates. You can then contact a potential host directly
+              {labels.refugeeContent[language]}
             </Text>
           </Grid.Col>
           <Grid.Col sm={6}>
@@ -51,13 +53,11 @@ export const AboutIndex = () => {
               <ShelterIcon size="2em" />
             </Center>
             <Text size="lg" align="center" weight={700} underline>
-              If you can host:
+              {labels.hostTilte[language]}
             </Text>
             <Space h="xs" />
             <Text size="lg" align="center">
-              Please register and become a host. We will ask you where, for how
-              long, and how many people you can host. Refugees will then be able
-              to contact you directly to arrange a hosting
+              {labels.hostContent[language]}
             </Text>
           </Grid.Col>
         </Grid>

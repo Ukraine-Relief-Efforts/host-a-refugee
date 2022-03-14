@@ -1,10 +1,10 @@
 export { Nav } from './nav';
 export { Footer } from './footer';
-export { UsersLookup } from './usersLookup';
+export { UsersLookup } from './usersLookup/usersLookup';
 export { Layout } from './layout';
-export { SignupForm } from './signupForm';
-export { Table } from './table';
-export { Modal } from './modal';
-export { AboutIndex } from './aboutIndex';
-export { PartnersTable } from './partnersTable';
-export { SignInModal } from './signInModal';
+export { SignupForm } from './signupForm/signupForm';
+export { Table } from './table/table';
+export { Modal } from './modal/modal';
+export { AboutIndex } from './aboutIndex/aboutIndex';
+export { PartnersTable } from './partnersTable/partnersTable';
+export { SignInModal } from './signInModal/signInModal';

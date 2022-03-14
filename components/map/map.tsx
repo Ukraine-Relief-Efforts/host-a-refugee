@@ -35,7 +35,10 @@ const Map = ({ pins, pin }: MapProps) => {
           (pin) =>
             pin.fields.lat && (
               <Marker key={pin.id} position={[pin.fields.lat, pin.fields.lng]}>
-                <Popup>Name: {pin.fields.name}</Popup>
+                <Popup>
+                  {pin.fields.city && `${pin.fields.city} - `}People:{' '}
+                  {pin.fields.groupSize}
+                </Popup>
               </Marker>
             )
         )}

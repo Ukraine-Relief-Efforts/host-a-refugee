@@ -104,6 +104,13 @@ export const SignupForm = ({ initialValues, method, url }: SignupFormProps) => {
     }
   };
 
+  const sortAlphabetically = (a: string, b: string) => {
+    return a.localeCompare(b, 'en', {
+      sensitivity: 'base',
+      ignorePunctuation: true,
+    });
+  };
+
   const onSubmitHandler = async (values: typeof form['values']) => {
     setIsSubmitting(true);
     setError('');
@@ -202,10 +209,12 @@ export const SignupForm = ({ initialValues, method, url }: SignupFormProps) => {
             placeholder={labels.cityPlaceholder[language]}
             data={citiesOptions[
               form.values.country as keyof typeof citiesOptions
-            ].map((city, index) => ({
-              value: `${city}-${index}`,
-              label: city,
-            }))}
+            ]
+              .sort(sortAlphabetically)
+              .map((city, index) => ({
+                value: `${city}-${index}`,
+                label: city,
+              }))}
           />
 
           <DateRangePicker

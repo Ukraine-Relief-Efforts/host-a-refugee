@@ -27,6 +27,7 @@ const routes = (lang: languageOptions) => [
 ];
 
 const authButtonStyle: {} = {
+  margin: '0.5rem',
   position: 'absolute',
   display: 'flex',
   right: 0,

@@ -76,11 +76,25 @@ export default async function handler(
       query: { profile },
     } = req;
 
+    const fields = {
+      name: req.body.name,
+      email: req.body.email,
+      city: req.body.city,
+      country: req.body.country,
+      accomodationDetails: req.body.accomodationDetails,
+      groupSize: req.body.groupSize,
+      phoneNumber: req.body.phoneNumber,
+      languages: req.body.languages,
+      dateStart: req.body.dateStart,
+      dateEnd: req.body.dateEnd,
+      userType: req.body.userType,
+    };
+
     switch (req.method) {
       case 'GET':
         if (!!profile) {
           const user = await getUserInfo(session);
-          return res.status(200).json({ user: user.fields });
+          return res.status(200).json({ user });
         } else {
           const { hosts, refugees } = await getAllUsers();
           res.setHeader(
@@ -91,21 +105,65 @@ export default async function handler(
         }
 
       case 'POST':
-        const { termsOfService, ...rest } = req.body;
+        const user = await getUserInfo(session);
+        if (!!user) {
+          return res.status(400).json({
+            error: 'User profile with this email already exists!',
+          });
+        }
+
         const { data: created } = await axios({
           method: 'POST',
           url: `${AIRTABLE_URL}/Hosts`,
           data: {
             records: [
               {
-                fields: rest,
+                fields,
               },
             ],
             typecast: true,
           },
-          headers: { Authorization: `Bearer ${AIRTABLE_API_KEY}` },
+          headers: {
+            Authorization: `Bearer ${AIRTABLE_API_KEY}`,
+            'Content-Type': 'application/json',
+          },
         });
         return res.status(200).json({ created });
+
+      case 'PATCH':
+        const { data: updated } = await axios({
+          method: 'PATCH',
+          url: `${AIRTABLE_URL}/Hosts`,
+          data: {
+            records: [
+              {
+                id: await getUserInfo(session).then((user) => user.id),
+                fields,
+              },
+            ],
+            typecast: true,
+          },
+          headers: {
+            Authorization: `Bearer ${AIRTABLE_API_KEY}`,
+            'Content-Type': 'application/json',
+          },
+        });
+        return res.status(200).json({ updated });
+
+      case 'DELETE':
+        await axios({
+          method: 'DELETE',
+          url: `${AIRTABLE_URL}/Hosts/${await getUserInfo(session).then(
+            (user) => user.id
+          )}`,
+          headers: {
+            Authorization: `Bearer ${AIRTABLE_API_KEY}`,
+            'Content-Type': 'application/json',
+          },
+        });
+        return res
+          .status(204)
+          .json({ message: 'Profile successfully deleted' });
 
       default:
         res.status(404).json({ info: 'method not implemented' });

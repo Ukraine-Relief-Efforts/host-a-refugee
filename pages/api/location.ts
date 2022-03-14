@@ -7,8 +7,11 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const { location } = req.body;
+<<<<<<< HEAD
 
   // TODO: use CitiesData.ts to get the coordinates instead of using an external api
+=======
+>>>>>>> main
   switch (req.method) {
     case 'POST':
       try {

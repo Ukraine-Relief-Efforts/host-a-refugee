@@ -1,11 +1,12 @@
 import Head from 'next/head';
 import { GetServerSideProps } from 'next';
+import Link from 'next/link';
 import { getSession } from 'next-auth/react';
-import { Space, Paper, Text, Title, Group, Badge } from '@mantine/core';
+import { Space, Paper, Text, Title, Group, Badge, Button } from '@mantine/core';
 import { AiOutlineCheck, AiOutlineClose } from 'react-icons/ai';
-import { Layout } from '../components';
-import { getUserInfo } from './api/users';
-import { User } from '../models';
+import { Layout } from '../../components';
+import { getUserInfo } from '../api/users';
+import { User } from '../../models';
 
 export default function ProfilePage({ user }: { user: User }) {
   return (
@@ -19,8 +20,8 @@ export default function ProfilePage({ user }: { user: User }) {
       <Layout size="xs">
         <Space h="xl" />
         <Paper padding="lg" shadow="sm" radius="md" withBorder>
-          <Group direction="column">
-            <Group>
+          <Group direction="column" grow>
+            <Group style={{ position: 'relative' }}>
               <Title order={3}>My Profile</Title>
               {user.fields.verified ? (
                 <Badge variant="filled" color="green">
@@ -37,6 +38,13 @@ export default function ProfilePage({ user }: { user: User }) {
                   </Group>
                 </Badge>
               )}
+              <div style={{ position: 'absolute', right: 0 }}>
+                <Link href="/profile/edit" passHref>
+                  <a>
+                    <Button>Edit</Button>
+                  </a>
+                </Link>
+              </div>
             </Group>
             <Space />
             <Group direction="column">
@@ -55,7 +63,9 @@ export default function ProfilePage({ user }: { user: User }) {
               <Group>
                 <Text weight="bold">City / region:</Text>
                 <Text color="dimmed">
-                  {user.fields.city}, {user.fields.country}
+                  {`${user.fields.city ? user.fields.city + ', ' : ''}${
+                    user.fields.country
+                  }`}
                 </Text>
               </Group>
               <Group>

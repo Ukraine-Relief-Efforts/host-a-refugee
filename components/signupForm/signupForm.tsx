@@ -1,13 +1,11 @@
 import { useContext, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useForm } from '@mantine/hooks';
 import axios from 'axios';
+import { useForm } from '@mantine/hooks';
+import { useSession } from 'next-auth/react';
 import {
-  Space,
-  Paper,
   Text,
   TextInput,
-  Title,
   Button,
   Textarea,
   NumberInput,
@@ -17,11 +15,11 @@ import {
   Group,
   LoadingOverlay,
 } from '@mantine/core';
+import { Modal } from '..';
 import { MdPhone } from 'react-icons/md';
-import { useSession } from 'next-auth/react';
 import { DateRangePicker } from '@mantine/dates';
 import { citiesOptions } from '../../data/citiesOptions';
-import { Modal } from '..';
+import countryAbbrs from '../../data/countryAbbrs';
 import { LanguageContext } from '../../context';
 import { labels } from './content';
 
@@ -34,41 +32,46 @@ const languagesOptions = [
   { value: 'German', label: 'German' },
   { value: 'Hungarian', label: 'Hungarian' },
 ];
-type languageOptions = 'eng' | 'ua' | 'pl' | 'ro' | 'sk' | 'de' | 'hu';
 
-export const SignupForm = () => {
+interface SignupFormProps {
+  initialValues: {
+    userType: string;
+    phoneNumber?: string;
+    country: string;
+    city?: string;
+    accomodationDetails?: string;
+    groupSize: number;
+    languages: string | string[];
+    termsOfService?: boolean;
+  };
+  method: 'POST' | 'PATCH';
+  url: string;
+}
+
+export const SignupForm = ({ initialValues, method, url }: SignupFormProps) => {
   const { language } = useContext(LanguageContext);
+
   const { push } = useRouter();
   const { data: session } = useSession();
+
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
   const [dates, setDates] = useState<[Date | null, Date | null]>([
     new Date(),
     new Date(),
   ]);
 
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [isSuccess, setIsSuccess] = useState<boolean>(false);
-  const [error, setError] = useState<string>('');
-
   const form = useForm({
-    initialValues: {
-      userType: '',
-      phoneNumber: '',
-      country: 'PL',
-      city: '',
-      accomodationDetails: '',
-      groupSize: 1,
-      languages: '',
-      termsOfService: false,
-      lat: '',
-      lng: '',
-    },
+    initialValues,
     validationRules: {
       userType: (value) => !!value,
       phoneNumber: (value) => {
-        var regEx = `^\\+?\\(?([0-9]{1,4})\\)?([-. ]?([0-9]{2}))?([-. ]?([0-9]{3}))([-. ]?([0-9]{2,3}))([-. ]?([0-9]{2,4}))$`;
-        return !!value || value.match(regEx) !== null;
+        const regEx = `^\\+?\\(?([0-9]{1,4})\\)?([-. ]?([0-9]{2}))?([-. ]?([0-9]{3}))([-. ]?([0-9]{2,3}))([-. ]?([0-9]{2,4}))$`;
+        return !!value || value!.match(regEx) !== null;
       },
       languages: (value) => !!value,
+      groupSize: (value) => value > 0,
     },
     errorMessages: {
       userType: labels.registerTypeError[language],
@@ -78,17 +81,30 @@ export const SignupForm = () => {
   });
 
   const { userType } = form.values;
+  const successMessage =
+    method === 'POST'
+      ? `Your registration was successful${
+          userType === 'host'
+            ? ", we can't thank you enough for your support in these tough times 💗"
+            : '.'
+        } We're working on matching you with a ${
+          userType === 'refugee' ? 'host' : 'refugee'
+        } and will be in touch with you as soon as possible!`
+      : 'Your profile was successfully updated!';
 
-  const retrieveLatLng = async (
-    city: string,
-    country: string
-  ): Promise<any> => {
+  const handleModalClose = () => {
+    form.reset();
+    setIsSuccess(false);
+    return push('/profile');
+  };
+
+  const retrieveLatLng = async (location: string): Promise<any> => {
     try {
       const { data } = await axios({
         method: 'POST',
         url: '/api/location',
         data: {
-          location: city || country,
+          location,
         },
       });
       const { latitude, longitude } = data;
@@ -101,9 +117,11 @@ export const SignupForm = () => {
   const onSubmitHandler = async (values: typeof form['values']) => {
     setIsSubmitting(true);
     setError('');
-
+    console.log(values);
     try {
-      const [lat, lng] = await retrieveLatLng(values.city, values.country);
+      const [lat, lng] = await retrieveLatLng(
+        values.city || countryAbbrs[values.country]
+      );
 
       const data = {
         ...values,
@@ -117,30 +135,21 @@ export const SignupForm = () => {
       };
 
       await axios({
-        method: 'POST',
-        url: '/api/users',
+        method,
+        url,
         data,
       });
       setIsSuccess(true);
     } catch (error: any) {
       console.error(error);
-      setError(error?.response?.data?.error || error.message);
+      setError(error.response?.data?.error || error.message);
     }
 
     return setIsSubmitting(false);
   };
 
-  const handleModalClose = () => {
-    form.reset();
-    setIsSuccess(false);
-    return push('/');
-  };
-
   return (
-    <Paper padding="lg" shadow="sm" radius="md" withBorder>
-      <Title order={3}>Register</Title>
-      <Space h="lg" />
-
+    <>
       <Modal
         opened={isSuccess}
         onClose={handleModalClose}
@@ -182,13 +191,10 @@ export const SignupForm = () => {
                 : 'Country of residence'
             }
             placeholder="Refugee / Host"
-            data={[
-              { value: 'HU', label: 'Hungary' },
-              { value: 'UA', label: 'Ukraine' },
-              { value: 'MD', label: 'Moldova' },
-              { value: 'PL', label: 'Poland' },
-              { value: 'RO', label: 'Romania' },
-            ]}
+            data={Object.entries(countryAbbrs).map(([key, value]) => ({
+              value: key,
+              label: value,
+            }))}
             required
           />
 
@@ -234,6 +240,7 @@ export const SignupForm = () => {
                 ? labels.groupSizeLabelRefugee[language]
                 : labels.groupSizeLabelHost[language]
             }
+            min={1}
             required
           />
 
@@ -245,11 +252,13 @@ export const SignupForm = () => {
             required
           />
 
-          <Checkbox
-            {...form.getInputProps('termsOfService')}
-            label={labels.tosLabel[language]}
-            required
-          />
+          {method === 'POST' && (
+            <Checkbox
+              {...form.getInputProps('termsOfService')}
+              label={labels.tosLabel[language]}
+              required
+            />
+          )}
 
           <Button type="submit" color="teal">
             {labels.buttonText[language]}
@@ -262,6 +271,6 @@ export const SignupForm = () => {
           )}
         </Group>
       </form>
-    </Paper>
+    </>
   );
 };

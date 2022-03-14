@@ -97,8 +97,7 @@ export const SignupForm = ({ initialValues, method, url }: SignupFormProps) => {
           location,
         },
       });
-      const { latitude, longitude } = data;
-      return [latitude, longitude];
+      return data;
     } catch (error: any) {
       console.error(error);
     }
@@ -116,7 +115,7 @@ export const SignupForm = ({ initialValues, method, url }: SignupFormProps) => {
     setError('');
 
     try {
-      const [lat, lng] = await retrieveLatLng(
+      const locationData = await retrieveLatLng(
         values.city || countryAbbrs[values.country]
       );
 
@@ -127,8 +126,7 @@ export const SignupForm = ({ initialValues, method, url }: SignupFormProps) => {
         name: session?.user?.name,
         email: session?.user?.email,
         avatar: session?.user?.image,
-        lat,
-        lng,
+        ...locationData,
       };
 
       await axios({
@@ -207,12 +205,14 @@ export const SignupForm = ({ initialValues, method, url }: SignupFormProps) => {
                 : labels.cityLabelHost[language]
             }
             placeholder={labels.cityPlaceholder[language]}
-            data={citiesOptions[
-              form.values.country as keyof typeof citiesOptions
+            data={[
+              ...new Set(
+                citiesOptions[form.values.country as keyof typeof citiesOptions]
+              ),
             ]
               .sort(sortAlphabetically)
-              .map((city, index) => ({
-                value: `${city}-${index}`,
+              .map((city) => ({
+                value: city,
                 label: city,
               }))}
           />

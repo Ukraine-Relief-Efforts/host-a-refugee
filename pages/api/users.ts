@@ -88,6 +88,8 @@ export default async function handler(
       dateStart: req.body.dateStart,
       dateEnd: req.body.dateEnd,
       userType: req.body.userType,
+      lat: req.body.lat,
+      lng: req.body.lng,
     };
 
     switch (req.method) {

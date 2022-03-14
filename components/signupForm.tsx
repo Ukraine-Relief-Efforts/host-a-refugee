@@ -19,6 +19,7 @@ import { Modal } from '.';
 import { MdPhone } from 'react-icons/md';
 import { DateRangePicker } from '@mantine/dates';
 import { citiesOptions } from '../data/citiesOptions';
+import countryAbbrs from '../data/countryAbbrs';
 
 const languagesOptions = [
   { value: 'English', label: 'English' },
@@ -114,9 +115,11 @@ export const SignupForm = ({ initialValues, method, url }: SignupFormProps) => {
   const onSubmitHandler = async (values: typeof form['values']) => {
     setIsSubmitting(true);
     setError('');
-
+    console.log(values);
     try {
-      const [lat, lng] = await retrieveLatLng(values.city || values.country);
+      const [lat, lng] = await retrieveLatLng(
+        values.city || countryAbbrs[values.country]
+      );
 
       const data = {
         ...values,
@@ -182,13 +185,10 @@ export const SignupForm = ({ initialValues, method, url }: SignupFormProps) => {
                 : 'Country of residence'
             }
             placeholder="Refugee / Host"
-            data={[
-              { value: 'HU', label: 'Hungary' },
-              { value: 'UA', label: 'Ukraine' },
-              { value: 'MD', label: 'Moldova' },
-              { value: 'PL', label: 'Poland' },
-              { value: 'RO', label: 'Romania' },
-            ]}
+            data={Object.entries(countryAbbrs).map(([key, value]) => ({
+              value: key,
+              label: value,
+            }))}
             required
           />
 

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
-import { getSession } from 'next-auth/react';
+import { getSession, signOut } from 'next-auth/react';
 import axios from 'axios';
 import {
   Paper,
@@ -26,8 +26,10 @@ export default function EditPage({ user }: { user: User }) {
   const [isDeleted, setIsDeleted] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
 
+  const { email, name, dateStart, dateEnd, ...formValues } = user.fields;
+
   const initialValues = {
-    ...user.fields,
+    ...formValues,
     termsOfService: true,
   };
 
@@ -46,12 +48,13 @@ export default function EditPage({ user }: { user: User }) {
       setError(error.response?.data?.error || error.message);
     }
 
-    setIsDeleting(false);
+    return setIsDeleting(false);
   };
 
   const handleSuccessModalClose = () => {
     setOpened(false);
     setIsDeleted(false);
+    signOut();
     return push('/');
   };
 
@@ -69,7 +72,10 @@ export default function EditPage({ user }: { user: User }) {
         title="Delete Confirmation"
         centered
       >
-        <Text>Are you sure you would like to delete your profile?</Text>
+        <Text>
+          Are you sure you would like to delete your profile? This will remove
+          all of your information from our records.
+        </Text>
         <Space h="xl" />
         <Group position="right">
           <Button onClick={handleDeleteConfirmation} color="red">

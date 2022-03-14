@@ -33,7 +33,7 @@ const languagesOptions = [
 interface SignupFormProps {
   initialValues: {
     userType: string;
-    phoneNumber: string;
+    phoneNumber?: string;
     country: string;
     city?: string;
     accomodationDetails?: string;
@@ -63,7 +63,7 @@ export const SignupForm = ({ initialValues, method, url }: SignupFormProps) => {
       userType: (value) => !!value,
       phoneNumber: (value) => {
         const regEx = `^\\+?\\(?([0-9]{1,4})\\)?([-. ]?([0-9]{2}))?([-. ]?([0-9]{3}))([-. ]?([0-9]{2,3}))([-. ]?([0-9]{2,4}))$`;
-        return !!value || value.match(regEx) !== null;
+        return !!value || value!.match(regEx) !== null;
       },
       languages: (value) => !!value,
       groupSize: (value) => value > 0,

@@ -48,7 +48,11 @@ interface SignupFormProps {
   url: string;
 }
 
-export const SignupForm = ({ initialValues, method, url }: SignupFormProps) => {
+export default function SignupForm({
+  initialValues,
+  method,
+  url,
+}: SignupFormProps) {
   const { language } = useContext(LanguageContext);
 
   const { push } = useRouter();
@@ -274,4 +278,4 @@ export const SignupForm = ({ initialValues, method, url }: SignupFormProps) => {
       </form>
     </>
   );
-};
+}

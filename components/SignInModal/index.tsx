@@ -13,7 +13,7 @@ interface SignInModealProps {
   onClose: () => void;
 }
 
-export const SignInModal = ({ opened, onClose }: SignInModealProps) => {
+export default function SignInModal({ opened, onClose }: SignInModealProps) {
   const login = (provider: string) => {
     return signIn(provider, {
       callbackUrl: '/profile?',
@@ -49,4 +49,4 @@ export const SignInModal = ({ opened, onClose }: SignInModealProps) => {
       <Space h={50} />
     </MantineModal>
   );
-};
+}

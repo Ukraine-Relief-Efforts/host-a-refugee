@@ -7,7 +7,7 @@ interface LayoutProps {
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 }
 
-export const Layout = ({ children, size }: LayoutProps) => {
+export default function Layout({ children, size }: LayoutProps) {
   return (
     <LanguageProvider>
       <Container
@@ -20,4 +20,4 @@ export const Layout = ({ children, size }: LayoutProps) => {
       </Container>
     </LanguageProvider>
   );
-};
+}

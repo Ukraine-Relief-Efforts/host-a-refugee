@@ -1,1 +1,0 @@
-export { AboutIndex } from './aboutIndex';

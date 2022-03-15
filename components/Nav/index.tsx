@@ -15,7 +15,7 @@ import {
   Select,
 } from '@mantine/core';
 import { useSession, signOut } from 'next-auth/react';
-import { SignInModal } from '../signInModal/signInModal';
+import SignInModal from '../SignInModal';
 import { LanguageContext } from '../../context';
 import { labels } from './content';
 
@@ -35,7 +35,7 @@ const authButtonStyle: {} = {
   alignContent: 'flex-end',
 };
 
-export const Nav = () => {
+export default function Nav() {
   const { data: session } = useSession();
   const [opened, setOpened] = useState(false);
   const { language, setLanguage }: any = useContext(LanguageContext);
@@ -100,7 +100,7 @@ export const Nav = () => {
       <Space h="xl" />
     </>
   );
-};
+}
 
 type LoggedInMenuProps = {
   session: any;

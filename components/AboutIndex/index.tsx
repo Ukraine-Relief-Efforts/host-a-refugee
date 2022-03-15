@@ -20,7 +20,8 @@ import { LanguageContext } from '../../context';
 
 const iconStyles: {} = { marginRight: '0.5em' };
 type languageOptions = 'eng' | 'ua' | 'pl' | 'ro' | 'sk' | 'de' | 'hu';
-export const AboutIndex = () => {
+
+export default function AboutIndex() {
   const { language } = useContext(LanguageContext);
 
   return (
@@ -81,4 +82,4 @@ export const AboutIndex = () => {
       </Text>
     </Paper>
   );
-};
+}

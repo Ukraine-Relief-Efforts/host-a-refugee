@@ -67,8 +67,10 @@ export const SignupForm = ({ initialValues, method, url }: SignupFormProps) => {
     validationRules: {
       userType: (value) => !!value,
       phoneNumber: (value) => {
-        const regEx = `^\\+?\\(?([0-9]{1,4})\\)?([-. ]?([0-9]{2}))?([-. ]?([0-9]{3}))([-. ]?([0-9]{2,3}))([-. ]?([0-9]{2,4}))$`;
-        return !!value || value!.match(regEx) !== null;
+        const regEx = new RegExp(
+          `^\\+?\\(?([0-9]{1,4})\\)?([-. ]?([0-9]{2}))?([-. ]?([0-9]{3}))([-. ]?([0-9]{2,3}))([-. ]?([0-9]{2,4}))$`
+        );
+        return value ? regEx.test(value!) : !!value;
       },
       languages: (value) => !!value,
       groupSize: (value) => value > 0,

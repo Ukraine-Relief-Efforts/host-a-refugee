@@ -13,7 +13,7 @@ const Map = ({ pins, pin }: MapProps) => {
       zoom={pin ? 9 : 6}
       scrollWheelZoom={false}
       style={{
-        height: 400,
+        height: pin ? 400 : 600,
         width: '100%',
         zIndex: '0',
         borderRadius: '0rem 0rem 0.5rem 0.5rem',
@@ -35,7 +35,10 @@ const Map = ({ pins, pin }: MapProps) => {
           (pin) =>
             pin.fields.lat && (
               <Marker key={pin.id} position={[pin.fields.lat, pin.fields.lng]}>
-                <Popup>Name: {pin.fields.name}</Popup>
+                <Popup>
+                  {pin.fields.city && `${pin.fields.city} - `}People:{' '}
+                  {pin.fields.groupSize}
+                </Popup>
               </Marker>
             )
         )}

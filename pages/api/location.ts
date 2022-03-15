@@ -21,11 +21,10 @@ export default async function handler(
           ),
         });
 
+        if (!data.length) return res.status(201).json({ lat: null, lng: null });
+
         const { latitude, longitude } = data[0];
-
-        console.log(data);
-
-        return res.status(201).json({ latitude, longitude });
+        return res.status(201).json({ lat: latitude, lng: longitude });
       } catch (error: any) {
         console.log(error);
         return res.status(500).json({ error: error.message });

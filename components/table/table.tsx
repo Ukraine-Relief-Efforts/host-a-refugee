@@ -36,7 +36,7 @@ export const Table = ({ data, type }: TableProps) => {
         <td>
           {country || city ? (
             <>
-              {city} {country}
+              {city && `${city}, `} {country}
             </>
           ) : (
             '-'
@@ -106,7 +106,7 @@ export const Table = ({ data, type }: TableProps) => {
         <Group direction="column">
           <Avatar radius="xl" size="lg" src={avatar} alt="it's me" />
           <Text>
-            <b>Location:</b> {city} {country}
+            <b>Location:</b> {city && `${city}, `} {country}
           </Text>
           {lat && lng && <Map pin={{ lat, lng, city, country }} />}
           <Text>

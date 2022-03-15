@@ -13,7 +13,7 @@ interface ModalProps {
   message: string;
 }
 
-export const Modal = ({ opened, onClose, title, message }: ModalProps) => {
+export default function Modal({ opened, onClose, title, message }: ModalProps) {
   return (
     <MantineModal
       opened={opened}
@@ -30,4 +30,4 @@ export const Modal = ({ opened, onClose, title, message }: ModalProps) => {
       </Group>
     </MantineModal>
   );
-};
+}

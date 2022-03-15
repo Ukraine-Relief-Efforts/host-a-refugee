@@ -6,7 +6,7 @@ import { User, Location } from '../../models';
 
 type MapProps = { pins?: User[]; pin?: Location };
 
-const Map = ({ pins, pin }: MapProps) => {
+export default function Map({ pins, pin }: MapProps) {
   return (
     <MapContainer
       center={pin ? [pin.lat, pin.lng] : [48.68, 21.76]}
@@ -44,6 +44,4 @@ const Map = ({ pins, pin }: MapProps) => {
         )}
     </MapContainer>
   );
-};
-
-export default Map;
+}

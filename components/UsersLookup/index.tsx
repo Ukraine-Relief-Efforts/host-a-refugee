@@ -6,10 +6,11 @@ import { User } from '../../models';
 import dynamic from 'next/dynamic';
 import { LanguageContext } from '../../context';
 import { labels } from './content';
+const Map = dynamic(() => import('../Map'), { ssr: false });
 
-const Map = dynamic(() => import('../map/map'), { ssr: false });
+type HostLookupProps = { hosts: User[]; refugees: User[] };
 
-export const UsersLookup = ({ hosts, refugees }: HostLookupProps) => {
+export default function UsersLookup({ hosts, refugees }: HostLookupProps) {
   const { language } = useContext(LanguageContext);
 
   return (
@@ -35,6 +36,4 @@ export const UsersLookup = ({ hosts, refugees }: HostLookupProps) => {
       <Space h="xl" />
     </>
   );
-};
-
-type HostLookupProps = { hosts: User[]; refugees: User[] };
+}

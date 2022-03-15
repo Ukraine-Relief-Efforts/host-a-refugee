@@ -14,13 +14,12 @@ import { User } from '../../models';
 import dynamic from 'next/dynamic';
 import { LanguageContext } from '../../context';
 import { labels } from './content';
-``;
 
-const Map = dynamic(() => import('../map/map'), { ssr: false });
+const Map = dynamic(() => import('../Map'), { ssr: false });
 
 type TableProps = { data: User[]; type: string };
 
-export const Table = ({ data, type }: TableProps) => {
+export default function Table({ data, type }: TableProps) {
   const [opened, setOpened] = useState(false);
   const [focused, setFocused] = useState<User | null>();
   const [value, setValue] = useState<[Date, Date]>([new Date(), new Date()]);
@@ -161,4 +160,4 @@ export const Table = ({ data, type }: TableProps) => {
       </div>
     </>
   );
-};
+}

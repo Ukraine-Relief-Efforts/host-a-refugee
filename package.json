@@ -11,7 +11,7 @@
   "dependencies": {
     "@mantine/core": "^3.6.14",
     "@mantine/dates": "^4.0.4",
-    "@mantine/hooks": "^3.6.9",
+    "@mantine/hooks": "^4.0.4",
     "@mantine/next": "^4.0.4",
     "@types/axios": "^0.14.0",
     "@types/marked": "^4.0.2",

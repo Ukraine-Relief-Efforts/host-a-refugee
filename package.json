@@ -25,7 +25,7 @@
     "marked": "^4.0.12",
     "next": "12.1.0",
     "next-auth": "^4.3.1",
-    "nodemailer": "^6.7.2",
+    "nodemailer": "^6.7.3",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-icons": "^4.3.1",
